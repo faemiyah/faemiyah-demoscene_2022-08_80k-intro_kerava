@@ -1,0 +1,22 @@
+Kerava
+
+Synth, music, additional direction:                              collateralburger
+Ukko model and character animation, Kerava landmark buildings:   Warma
+Everything else:                                                 Trilkk
+
+This work intends to celebrate Kerava's rich history, culture and architecture. We hope
+it makes even one person visit this prominent and beautiful city.
+
+Insofar as I know, this is the first ever 'fully' compressed Linux-arm32l intro in the
+sense it skips the GNU linker completely. The amount of hoops necessary to be jumped to
+achieve this is significantly higher than with traditional ia32/amd64 architecture.
+Full explanation would be too long for this text file.
+
+Real wild technically has no size restrictions, but this work ended up being 75k in
+size, so it would fit into 80k category. Ports for other platforms are found in rel/,
+but they follow no size restrictions whatsoever. If you want to run the program
+yourself, starting in developer mode (-d or --developer) will skip synthesizing the
+music and instead load the .flac file which is a lot faster. In this case you need to
+press 'p' to start.
+
+Greets in the intro.
