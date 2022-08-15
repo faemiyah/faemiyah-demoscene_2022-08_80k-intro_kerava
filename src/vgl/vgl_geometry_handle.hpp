@@ -80,7 +80,7 @@ public:
     {
         detail::geometry_buffer_bind(m_geometry_buffer, prog);
         dnload_glDrawElements(mode, static_cast<GLsizei>(count), GL_UNSIGNED_SHORT,
-                reinterpret_cast<void*>(m_index_offset));
+                reinterpret_cast<void*>(static_cast<size_t>(m_index_offset)));
     }
 
 public:

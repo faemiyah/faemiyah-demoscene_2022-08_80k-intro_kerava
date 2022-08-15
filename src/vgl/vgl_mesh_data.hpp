@@ -84,7 +84,7 @@ public:
             if(ret >= 0)
             {
                 unsigned idx = static_cast<unsigned>(ret);
-                const void* offset = reinterpret_cast<const void*>(m_offset);
+                const void* offset = reinterpret_cast<const void*>(static_cast<size_t>(m_offset));
                 attrib_array_enable(idx);
                 dnload_glVertexAttribPointer(idx, m_element_count, m_type, m_normalized, stride, offset);
             }
