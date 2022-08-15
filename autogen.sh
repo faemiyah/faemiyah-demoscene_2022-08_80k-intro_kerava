@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CFLAGS_PATH="${HOME}/bin/cflags"
+CFLAGS_PATH="${HOME}/.local/bin/cflags"
 ACINCLUDE="${CFLAGS_PATH}/acinclude.m4"
 AUTOGEN="${CFLAGS_PATH}/autogen.sh"
 DEFAULTS_CMAKE="${CFLAGS_PATH}/defaults.cmake"
