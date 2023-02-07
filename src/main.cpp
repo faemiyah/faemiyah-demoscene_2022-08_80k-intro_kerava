@@ -273,7 +273,7 @@ static int g_visual_debug = 0;
 
 static const char *usage = ""
 "Usage: kerava <options>\n"
-"For Assembly 2020 wild demo compo.\n"
+"For Assembly 2022 real wild compo.\n"
 "Release version does not pertain to any size limitations.\n";
 
 /// Developer mode global toggle.
