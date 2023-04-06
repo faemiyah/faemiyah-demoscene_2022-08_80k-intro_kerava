@@ -202,23 +202,12 @@ static void puts_ptr(void* op)
 // vgl include #########################
 //######################################
 
-/// \cond
-// Disable some unused features.
-#define VGL_DISABLE_CEIL
-#define VGL_DISABLE_DEPTH_TEXTURE
-#define VGL_DISABLE_EDGE
-#define VGL_DISABLE_OGG
-#define VGL_DISABLE_STENCIL
-// Some alternative methods.
-#define VGL_USE_BONE_STATE_FULL_TRANSFORM
-/// \endcond
-
 // Only include top-level headers.
 #include "vgl/vgl_animation_state.hpp"
-#include "vgl/vgl_csg.hpp"
 #include "vgl/vgl_font.hpp"
 #include "vgl/vgl_frame_buffer.hpp"
 #include "vgl/vgl_image_2d_gray.hpp"
+#include "vgl/vgl_logical_mesh.hpp"
 #include "vgl/vgl_opus.hpp"
 #include "vgl/vgl_render_queue.hpp"
 
@@ -1038,7 +1027,7 @@ void _start()
 
 #if defined(USE_LD)
     std::cout << "Vertex data:   " << human_readable_memory(vgl::get_data_size_vertex()) <<  " in " <<
-        vgl::detail::g_geometry_buffers.size() << " buffers\nIndex data:    " <<
+        vgl::get_num_geometry_buffers() << " buffers\nIndex data:    " <<
         human_readable_memory(vgl::get_data_size_index()) << "\nTexture data:  " <<
         human_readable_memory(vgl::get_data_size_texture()) << std::endl;
 #endif

@@ -49,7 +49,7 @@ private:
     IndexBlock(GLenum type, unsigned count, unsigned offset) :
         m_type(type),
         m_count(count),
-        m_offset(reinterpret_cast<uint16_t*>(static_cast<size_t>(offset)))
+        m_offset(reinterpret_cast<uint16_t*>(offset))
     {
     }
 

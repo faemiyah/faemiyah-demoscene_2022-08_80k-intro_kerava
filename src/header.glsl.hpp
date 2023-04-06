@@ -4,7 +4,6 @@ static const char *g_shader_header = ""
 #if defined(USE_LD)
 "header.glsl"
 #else
-"precision highp float;"
 "vec3 n(float v)"
 "{"
 "float r=v*65535.1,e=r-floor(r);"
@@ -22,10 +21,10 @@ static const char *g_shader_header = ""
 "}"
 "float c(float e,float r)"
 "{"
-"if(r>=e)return 1.;"
+"if(r>=e)return 1;"
 "float a=e-.2;"
 "if(r>=a)return(r-a)/.2;"
-"return .0;"
+"return 0;"
 "}"
 #endif
 "";
