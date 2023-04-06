@@ -288,7 +288,6 @@ static void asm_exit(void)
 #define dnload_glGetAttribLocation glGetAttribLocation
 #define dnload_SDL_GetTicks SDL_GetTicks
 #define dnload_exp2f exp2f
-#define dnload_glPolygonOffset glPolygonOffset
 #define dnload_glActiveTexture glActiveTexture
 #define dnload_logf logf
 #define dnload_FT_Load_Glyph FT_Load_Glyph
@@ -399,7 +398,6 @@ static void asm_exit(void)
 #define dnload_glGetAttribLocation g_symbol_table.df_glGetAttribLocation
 #define dnload_SDL_GetTicks g_symbol_table.df_SDL_GetTicks
 #define dnload_exp2f g_symbol_table.df_exp2f
-#define dnload_glPolygonOffset g_symbol_table.df_glPolygonOffset
 #define dnload_glActiveTexture g_symbol_table.df_glActiveTexture
 #define dnload_logf g_symbol_table.df_logf
 #define dnload_FT_Load_Glyph g_symbol_table.df_FT_Load_Glyph
@@ -512,7 +510,6 @@ static struct SymbolTableStruct
     GLint (DNLOAD_APIENTRY *df_glGetAttribLocation)(GLuint, const GLchar*);
     uint32_t (*df_SDL_GetTicks)(void);
     float (*df_exp2f)(float);
-    void (DNLOAD_APIENTRY *df_glPolygonOffset)(GLfloat, GLfloat);
     void (DNLOAD_APIENTRY *df_glActiveTexture)(GLenum);
     float (*df_logf)(float);
     FT_Error (*df_FT_Load_Glyph)(FT_Face, FT_UInt, FT_Int32);
@@ -621,7 +618,6 @@ static struct SymbolTableStruct
     (GLint (DNLOAD_APIENTRY *)(GLuint, const GLchar*))0xceb27dd0,
     (uint32_t (*)(void))0xd1d0b104,
     (float (*)(float))0xd2cc2a11,
-    (void (DNLOAD_APIENTRY *)(GLfloat, GLfloat))0xd77292a8,
     (void (DNLOAD_APIENTRY *)(GLenum))0xd7d4d450,
     (float (*)(float))0xd7efe342,
     (FT_Error (*)(FT_Face, FT_UInt, FT_Int32))0xdb48d8e4,
@@ -847,7 +843,7 @@ static void* dnload_find_symbol(uint32_t hash)
 static void dnload(void)
 {
     unsigned ii;
-    for(ii = 0; (107 > ii); ++ii)
+    for(ii = 0; (106 > ii); ++ii)
     {
         void **iter = ((void**)&g_symbol_table) + ii;
         *iter = dnload_find_symbol(*(uint32_t*)iter);

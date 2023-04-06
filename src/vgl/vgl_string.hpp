@@ -363,7 +363,7 @@ public:
     /// \return This object.
     string& assign(const string_data<char>& op)
     {
-        return assign(reinterpret_cast<const char*>(op.data()), op.length());
+        return assign(reinterpret_cast<const char*>(op.data(), op.length()));
     }
 
     /// Clear the string data.

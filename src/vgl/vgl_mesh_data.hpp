@@ -84,7 +84,7 @@ public:
             if(ret >= 0)
             {
                 unsigned idx = static_cast<unsigned>(ret);
-                const void* offset = reinterpret_cast<const void*>(static_cast<size_t>(m_offset));
+                const void* offset = reinterpret_cast<const void*>(m_offset);
                 attrib_array_enable(idx);
                 dnload_glVertexAttribPointer(idx, m_element_count, m_type, m_normalized, stride, offset);
             }
@@ -113,6 +113,7 @@ public:
         }
 
 #if defined(USE_LD)
+
         /// Stream output operator.
         ///
         /// \param lhs Left-hand-side operand.
@@ -123,6 +124,7 @@ public:
             return lhs << to_string(rhs.m_semantic) << ": " << rhs.m_element_count << ", " << rhs.m_type << ", " <<
                 rhs.m_offset;
         }
+
 #endif
     };
 
@@ -374,7 +376,7 @@ public:
             }
         }
 #endif
-        disable_excess_attrib_arrays(disable_attribs);
+        attrib_array_disable_from(disable_attribs);
     }
 
     /// Update to GPU.
@@ -403,6 +405,24 @@ public:
         detail::geometry_handle_update_mesh_data(op, *this);
     }
 };
+
+namespace detail
+{
+
+#if defined(USE_LD)
+
+/// Increment data sizes by given mesh data size.
+///
+/// \param op Mesh data being uploaded.
+constexpr void increment_buffer_data_sizes(const MeshData& op)
+{
+    increment_data_size_vertex(op.getVertexOffset());
+    increment_data_size_index(op.getIndexOffset());
+}
+
+#endif
+
+}
 
 }
 

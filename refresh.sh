@@ -19,7 +19,7 @@ if [ ! -f "src/dnload.h" ] ; then
   touch src/dnload.h
 fi
 
-python3 "${DNLOAD}" -v src/main.cpp -E --rand=gnu $*
+python3 "${DNLOAD}" -v src/main.cpp -E --rand=gnu -DVGL_DISABLE_CEIL -DVGL_DISABLE_DEPTH_TEXTURE -DVGL_DISABLE_EDGE -DVGL_DISABLE_OGG -DVGL_DISABLE_POLYGON_OFFSET -DVGL_DISABLE_STENCIL -DVGL_USE_BONE_STATE_FULL_TRANSFORM $*
 if [ $? -ne 0 ] ; then
   echo "${0}: regenerating symbols failed"
   exit 1
