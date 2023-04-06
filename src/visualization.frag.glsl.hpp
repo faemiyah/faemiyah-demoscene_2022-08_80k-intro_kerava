@@ -7,7 +7,7 @@ static const char *g_shader_fragment_visualization = ""
 "uniform float g;"
 "void main()"
 "{"
-"gl_FragColor=vec4(vec3(0),i(g,.0));"
+"gl_FragColor=vec4(vec3(.0),i(g,.0));"
 "}"
 #endif
 "";
