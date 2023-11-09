@@ -4,14 +4,14 @@ static const char *g_shader_fragment_font_overlay = ""
 #if defined(USE_LD)
 "font_overlay.frag.glsl"
 #else
-"uniform sampler2D m;"
-"uniform sampler2D u;"
+"uniform sampler2D P;"
+"uniform sampler2D T;"
 "varying vec2 t;"
-"varying vec2 e;"
+"varying vec2 D;"
 "void main()"
 "{"
-"float r=texture2D(m,t).r,a=texture2D(u,e).r+.001;"
-"gl_FragColor=vec4(c(a,r*.6));"
+"float H=texture2D(P,t).s,f=texture2D(T,D).s+.001;"
+"gl_FragColor=vec4(C(f,H*.6));"
 "}"
 #endif
 "";
@@ -26,14 +26,14 @@ static const char* g_shader_fragment_font_overlay_uniform_glyph DNLOAD_RENAME_UN
 #if defined(USE_LD)
 "glyph"
 #else
-"m"
+"P"
 #endif
 "";
 static const char* g_shader_fragment_font_overlay_uniform_stipple DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "stipple"
 #else
-"u"
+"T"
 #endif
 "";
 #endif

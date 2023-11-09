@@ -1,4 +1,6 @@
+#if !defined(VGL_DISABLE_DEPTH_TEXTURE)
 #define VGL_DISABLE_DEPTH_TEXTURE
+#endif
 
 uniform sampler2D color;
 #if !defined(VGL_DISABLE_DEPTH_TEXTURE)

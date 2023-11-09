@@ -5,13 +5,13 @@ static const char *g_shader_fragment_skeleton = ""
 "skeleton.frag.glsl"
 #else
 "uniform vec2 t;"
-"varying vec3 e;"
-"varying vec3 a;"
+"varying vec3 D;"
+"varying vec3 f;"
 "void main()"
 "{"
-"vec3 r=normalize(e),e=normalize(a);"
-"float a=t.g-t.r;"
-"gl_FragColor=vec4(n(gl_FragCoord.b/gl_FragCoord.a/a),i(.0,1.-dot(e,r)));"
+"vec3 H=normalize(D),D=normalize(f);"
+"float f=t.t-t.s;"
+"gl_FragColor=vec4(I(gl_FragCoord.p/gl_FragCoord.q/f),x(.0,1.-dot(D,H)));"
 "}"
 #endif
 "";

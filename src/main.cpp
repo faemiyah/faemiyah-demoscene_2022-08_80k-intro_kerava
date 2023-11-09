@@ -47,7 +47,7 @@ namespace po = boost::program_options;
 #define INTRO_LENGTH (INTRO_FRAMERATE * 124)
 
 /// Intro start position (in seconds).
-#define INTRO_START (INTRO_FRAMERATE * 70)
+#define INTRO_START (INTRO_FRAMERATE * 0)
 
 /// Size of one sample in bytes.
 #define AUDIO_SAMPLE_SIZE 4

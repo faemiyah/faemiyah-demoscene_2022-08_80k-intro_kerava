@@ -4,14 +4,14 @@ static const char *g_shader_fragment_offscreen = ""
 #if defined(USE_LD)
 "offscreen.frag.glsl"
 #else
-"uniform vec2 v;"
-"varying vec3 e;"
-"varying vec3 a;"
+"uniform vec2 t;"
+"varying vec3 D;"
+"varying vec3 f;"
 "void main()"
 "{"
-"vec3 r=normalize(e),e=normalize(a);"
-"float a=v.g-v.r;"
-"gl_FragColor=vec4(n(gl_FragCoord.b/gl_FragCoord.a/a),i(.0,1.-dot(e,r)));"
+"vec3 H=normalize(D),D=normalize(f);"
+"float f=t.t-t.s;"
+"gl_FragColor=vec4(I(gl_FragCoord.p/gl_FragCoord.q/f),x(.0,1.-dot(D,H)));"
 "}"
 #endif
 "";
@@ -26,7 +26,7 @@ static const char* g_shader_fragment_offscreen_uniform_projection_range DNLOAD_R
 #if defined(USE_LD)
 "projection_range"
 #else
-"v"
+"t"
 #endif
 "";
 #endif

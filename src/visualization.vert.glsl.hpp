@@ -4,11 +4,11 @@ static const char *g_shader_vertex_visualization = ""
 #if defined(USE_LD)
 "visualization.vert.glsl"
 #else
-"attribute vec3 r;"
-"uniform mat4 o;"
+"attribute vec3 H;"
+"uniform mat4 L;"
 "void main()"
 "{"
-"gl_Position=o*vec4(r,1.);"
+"gl_Position=L*vec4(H,1.);"
 "}"
 #endif
 "";
@@ -23,14 +23,14 @@ static const char* g_shader_vertex_visualization_attribute_position DNLOAD_RENAM
 #if defined(USE_LD)
 "position"
 #else
-"r"
+"H"
 #endif
 "";
 static const char* g_shader_vertex_visualization_uniform_combined_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "combined_transform"
 #else
-"o"
+"L"
 #endif
 "";
 #endif
