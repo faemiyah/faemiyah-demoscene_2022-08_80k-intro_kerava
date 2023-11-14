@@ -687,7 +687,11 @@ private:
             m_program_post.addUniform("debug_mode");
 #endif
         }
+    }
 
+    /// Initialize the GPU-related data.
+    void initializeGraphics()
+    {
         // Create the stipple texture.
         {
             vgl::Image2DGray stipple(STIPPLE_SIZE, STIPPLE_SIZE);
@@ -738,11 +742,7 @@ private:
                 m_font->createCharacter(ii);
             }
         }
-    }
 
-    /// Initialize the GPU-related data.
-    void initializeGraphics()
-    {
         // Screen quad.
         {
             static const int16_t data[] =
