@@ -89,6 +89,7 @@ set(VGL_SOURCES
     "${VGL_ROOT}/vgl_csg_file.cpp"
     "${VGL_ROOT}/vgl_extern_boost_filesystem.cpp"
     "${VGL_ROOT}/vgl_font.cpp"
+    "${VGL_ROOT}/vgl_frame_buffer.cpp"
     "${VGL_ROOT}/vgl_geometry_channel.cpp"
     "${VGL_ROOT}/vgl_glsl_program.cpp"
     "${VGL_ROOT}/vgl_glsl_shader.cpp"
