@@ -1,5 +1,5 @@
-#ifndef VGL_EXTERN_HPP
-#define VGL_EXTERN_HPP
+#ifndef VGL_EXTERN_OPENGL_HPP
+#define VGL_EXTERN_OPENGL_HPP
 
 /// \file
 /// \brief External include: OpenGL
@@ -22,6 +22,9 @@
 #endif
 #if !defined(dnload_glBindBuffer)
 #define dnload_glBindBuffer glBindBuffer
+#endif
+#if !defined(dnload_glBindFramebuffer)
+#define dnload_glBindFramebuffer glBindFramebuffer
 #endif
 #if !defined(dnload_glBindTexture)
 #define dnload_glBindTexture glBindTexture
@@ -95,11 +98,17 @@
 #if !defined(dnload_glEnableVertexAttribArray)
 #define dnload_glEnableVertexAttribArray glEnableVertexAttribArray
 #endif
+#if !defined(dnload_glFramebufferTexture2D)
+#define dnload_glFramebufferTexture2D glFramebufferTexture2D
+#endif
 #if !defined(dnload_glGenBuffers)
 #define dnload_glGenBuffers glGenBuffers
 #endif
 #if !defined(dnload_glGenerateMipmap)
 #define dnload_glGenerateMipmap glGenerateMipmap
+#endif
+#if !defined(dnload_glGenFramebuffers)
+#define dnload_glGenFramebuffers glGenFramebuffers
 #endif
 #if !defined(dnload_glGenTextures)
 #define dnload_glGenTextures glGenTextures
@@ -124,6 +133,9 @@
 #endif
 #if !defined(dnload_glStencilOpSeparate)
 #define dnload_glStencilOpSeparate glStencilOpSeparate
+#endif
+#if !defined(dnload_glTexImage2D)
+#define dnload_glTexImage2D glTexImage2D
 #endif
 #if !defined(dnload_glTexParameterf)
 #define dnload_glTexParameterf glTexParameterf
@@ -160,6 +172,9 @@
 #endif
 #if !defined(dnload_glVertexAttribPointer)
 #define dnload_glVertexAttribPointer glVertexAttribPointer
+#endif
+#if !defined(dnload_glViewport)
+#define dnload_glViewport glViewport
 #endif
 /// \endcond
 

@@ -16,7 +16,7 @@ static const char *g_shader_fragment_font = ""
 "if(D<=.3)discard;"
 "vec3 t=normalize(f);"
 "float f=A.t-A.s;"
-"gl_FragColor=vec4(I(gl_FragCoord.p/gl_FragCoord.q/f),x(.8,1.-dot(t,H)));"
+"gl_FragColor=vec4(I(gl_FragCoord.p/gl_FragCoord.q/f),C(.8,1.-dot(t,H)));"
 "}"
 #endif
 "";

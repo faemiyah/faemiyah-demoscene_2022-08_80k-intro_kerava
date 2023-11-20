@@ -7,20 +7,20 @@ static const char *g_shader_vertex_font = ""
 "attribute vec3 H;"
 "attribute vec3 L;"
 "attribute vec2 A;"
-"uniform mat4 E;"
 "uniform mat4 Q;"
-"uniform mat3 P;"
-"uniform vec3 T;"
+"uniform mat4 Y;"
+"uniform mat3 T;"
+"uniform vec3 P;"
 "uniform vec3 X;"
-"uniform vec4 Y;"
+"uniform vec4 E;"
 "varying vec3 D;"
 "varying vec3 f;"
 "varying vec2 t;"
 "void main()"
 "{"
-"D=P*L,t=A;"
-"vec3 D=vec3(H.st*Y.pq+Y.st,H.p)+X;"
-"f=T-(Q*vec4(D,1.)).stp,gl_Position=E*vec4(D,1.);"
+"D=T*L,t=A;"
+"vec3 D=vec3(H.st*E.pq+E.st,H.p)+X;"
+"f=P-(Y*vec4(D,1.)).stp,gl_Position=Q*vec4(D,1.);"
 "}"
 #endif
 "";
@@ -56,28 +56,28 @@ static const char* g_shader_vertex_font_uniform_combined_transform DNLOAD_RENAME
 #if defined(USE_LD)
 "combined_transform"
 #else
-"E"
+"Q"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_modelview_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "modelview_transform"
 #else
-"Q"
+"Y"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_normal_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "normal_transform"
 #else
-"P"
+"T"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_camera_position DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "camera_position"
 #else
-"T"
+"P"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_glyph_position DNLOAD_RENAME_UNUSED = ""
@@ -91,7 +91,7 @@ static const char* g_shader_vertex_font_uniform_glyph_quad DNLOAD_RENAME_UNUSED 
 #if defined(USE_LD)
 "glyph_quad"
 #else
-"Y"
+"E"
 #endif
 "";
 #endif

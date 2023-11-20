@@ -11,7 +11,7 @@ static const char *g_shader_fragment_offscreen = ""
 "{"
 "vec3 H=normalize(D),D=normalize(f);"
 "float f=t.t-t.s;"
-"gl_FragColor=vec4(I(gl_FragCoord.p/gl_FragCoord.q/f),x(.0,1.-dot(D,H)));"
+"gl_FragColor=vec4(I(gl_FragCoord.p/gl_FragCoord.q/f),C(.0,1.-dot(D,H)));"
 "}"
 #endif
 "";

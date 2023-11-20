@@ -6,17 +6,17 @@ static const char *g_shader_vertex_font_overlay = ""
 #else
 "attribute vec3 H;"
 "attribute vec2 A;"
-"uniform mat4 Y;"
-"uniform vec3 E;"
+"uniform mat4 E;"
+"uniform vec3 Q;"
 "uniform vec4 L;"
-"uniform vec4 Q;"
+"uniform vec4 Y;"
 "varying vec2 t;"
 "varying vec2 D;"
 "void main()"
 "{"
 "t=A;"
-"vec3 f=vec3(H.st*L.pq+L.st,H.p)+E;"
-"gl_Position=Y*vec4(f,1.),D=gl_Position.st*Q.pq*.5;"
+"vec3 f=vec3(H.st*L.pq+L.st,H.p)+Q;"
+"gl_Position=E*vec4(f,1.),D=gl_Position.st*Y.pq*.5;"
 "}"
 #endif
 "";
@@ -45,14 +45,14 @@ static const char* g_shader_vertex_font_overlay_uniform_modelview_transform DNLO
 #if defined(USE_LD)
 "modelview_transform"
 #else
-"Y"
+"E"
 #endif
 "";
 static const char* g_shader_vertex_font_overlay_uniform_glyph_position DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "glyph_position"
 #else
-"E"
+"Q"
 #endif
 "";
 static const char* g_shader_vertex_font_overlay_uniform_glyph_quad DNLOAD_RENAME_UNUSED = ""
@@ -66,7 +66,7 @@ static const char* g_shader_vertex_font_overlay_uniform_scoords DNLOAD_RENAME_UN
 #if defined(USE_LD)
 "scoords"
 #else
-"Q"
+"Y"
 #endif
 "";
 #endif

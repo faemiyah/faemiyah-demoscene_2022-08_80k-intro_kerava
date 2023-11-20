@@ -7333,7 +7333,8 @@ private:
 
                     auto track_shape = [](float px, float py) -> float
                     {
-                        float bump_noise = frand(1.0f - TERRAIN_BUMP_NOISE, 1.0f + TERRAIN_BUMP_NOISE) * TERRAIN_BUMP_HEIGHT;
+                        float bump_noise = vgl::frand(1.0f - TERRAIN_BUMP_NOISE, 1.0f + TERRAIN_BUMP_NOISE) *
+                            TERRAIN_BUMP_HEIGHT;
                         return py * vgl::smooth_step(TERRAIN_SLOPE_START, TERRAIN_SLOPE_END, abs(px)) +
                             vgl::smooth_step(-TERRAIN_BUMP_END, -TERRAIN_BUMP_START, -abs(px)) * bump_noise;
                     };
@@ -7359,16 +7360,16 @@ private:
                         // Seam must match, so no jitter if there.
                         if((ii != 0) && (jj != 0) && (ii < HORIZ_FIDELITY) && (jj < VERT_BLOCK_FIDELITY))
                         {
-                            x1 += frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
-                            z1 += frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
+                            x1 += vgl::frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
+                            z1 += vgl::frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
                         }
                         float y1 = img.sampleLinear(x1 * INV_HORIZ, (z1 + static_cast<float>(bb)) * INV_VERT);
                         x1 = (x1 - static_cast<float>(HORIZ_FIDELITY / 2)) * UNIT_WIDTH_X;
                         z1 *= UNIT_WIDTH_Z;
 
                         // Intentionally becomes an orphaned vertex at the last row/column.
-                        float x5 = static_cast<float>(ii) + 0.5f + frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
-                        float z5 = static_cast<float>(jj) + 0.5f + frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
+                        float x5 = static_cast<float>(ii) + 0.5f + vgl::frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
+                        float z5 = static_cast<float>(jj) + 0.5f + vgl::frand(-TERRAIN_TILE_JITTER, TERRAIN_TILE_JITTER);
                         float y5 = img.sampleLinear(x5 * INV_HORIZ, (z5 + static_cast<float>(bb)) * INV_VERT);
                         x5 = (x5 - static_cast<float>(HORIZ_FIDELITY / 2)) * UNIT_WIDTH_X;
                         z5 *= UNIT_WIDTH_Z;
@@ -7557,7 +7558,7 @@ private:
                             float rz = static_cast<float>(pz) / static_cast<float>(CITY_AREA_Z);
 
                             float rel_len = length(vgl::vec2(static_cast<float>(rx), static_cast<float>(rz)));
-                            float idx_dec = frand(1.22f);
+                            float idx_dec = vgl::frand(1.22f);
                             idx_dec *= idx_dec * idx_dec * idx_dec * 4.0f;
                             int idx = BUILDING_COUNT - vgl::iround(rel_len * static_cast<float>(BUILDING_COUNT) + idx_dec);
 
@@ -7689,9 +7690,9 @@ private:
 
                 for(unsigned ii = 0; (ii < INTRO_LENGTH); ++ii)
                 {
-                    float jx = frand(-CAMERA_JITTER_INC, CAMERA_JITTER_INC);
-                    float jy = frand(-CAMERA_JITTER_INC, CAMERA_JITTER_INC);
-                    float jz = frand(-CAMERA_JITTER_INC, CAMERA_JITTER_INC);
+                    float jx = vgl::frand(-CAMERA_JITTER_INC, CAMERA_JITTER_INC);
+                    float jy = vgl::frand(-CAMERA_JITTER_INC, CAMERA_JITTER_INC);
+                    float jz = vgl::frand(-CAMERA_JITTER_INC, CAMERA_JITTER_INC);
 
                     jitter = jitter * CAMERA_JITTER_MUL + vgl::vec3(jx, jy, jz);
                     m_camera_jitter.push_back(jitter);

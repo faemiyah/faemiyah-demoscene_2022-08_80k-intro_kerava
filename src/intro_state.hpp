@@ -83,7 +83,7 @@ struct TextPosition
 };
 
 /// Individual text positions.
-struct TextPosition g_text_positions[] =
+TextPosition g_text_positions[] =
 {
     { { 10, 41, 410, 10, 47, 410, 0, 64, 10, 0, 64, 12, 5270, 5340, 222, }, "Adapt" },
     { { 10, 38, 380, 10, 44, 380, 0, 64, 11, 0, 64, 13, 5275, 5345, 222, }, "Blobtrox" },
@@ -709,7 +709,7 @@ public:
                 dnload_srand(static_cast<unsigned>(ticks));
                 for(auto& vv : glyph)
                 {
-                    if(frand() > *blink)
+                    if(vgl::frand() > *blink)
                     {
                         vv = nullptr;
                     }
@@ -1333,8 +1333,8 @@ public:
                     {
                         dnload_srand(static_cast<unsigned>(ii->m_data[2]));
                     }
-                    fpos[0] += frand(-1.0f, 1.0f) * static_cast<float>(ii->m_data[3]);
-                    fpos[1] += frand(-1.0f, 1.0f) * static_cast<float>(ii->m_data[4]);
+                    fpos[0] += vgl::frand(-1.0f, 1.0f) * static_cast<float>(ii->m_data[3]);
+                    fpos[1] += vgl::frand(-1.0f, 1.0f) * static_cast<float>(ii->m_data[4]);
                     // Draw text.
                     vgl::vec2 cpos = fpos * fs * 0.01f;
                     vgl::vec2 cfs = fs * (static_cast<float>(ii->m_data[5]) * 0.01f);

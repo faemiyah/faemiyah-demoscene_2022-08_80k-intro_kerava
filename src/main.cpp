@@ -94,25 +94,6 @@ typedef uint8_t sample_t;
 // Pre-vgl definitions #################
 //######################################
 
-/// \brief Random float value.
-///
-/// \param op Given maximum value.
-/// \return Random value between 0.0f and given value.
-static float frand(float op = 1.0f)
-{
-    return static_cast<float>(dnload_rand() & 0xFFFF) * ((1.0f / 65535.0f) * op);
-}
-
-/// \brief Random float value.
-///
-/// \param lo Minimum value.
-/// \param hi Maximum value.
-/// \return Random value between low and high values.
-static float frand(float lo, float hi)
-{
-    return frand(hi - lo) + lo;
-}
-
 #if 0
 /// Output a integer value (for debugging).
 ///
@@ -460,7 +441,7 @@ public:
         int64_t tv_nsec = (static_cast<int64_t>(query.QuadPart % m_pfreq.QuadPart) * NSEC_MUL) / static_cast<int64_t>(m_pfreq.QuadPart);
         return static_cast<int64_t>(tv_sec_32) * NSEC_MUL + tv_nsec;
 #else
-        struct timespec ret;
+        timespec ret;
         if(clock_gettime(CLOCK_MONOTONIC, &ret))
         {
             BOOST_THROW_EXCEPTION(std::runtime_error("clock_gettime() failed"));
