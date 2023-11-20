@@ -6,6 +6,10 @@
 #include "vgl_rand.hpp"
 #include "vgl_vector.hpp"
 
+#if defined(USE_LD)
+#include <sstream>
+#endif
+
 namespace vgl
 {
 
