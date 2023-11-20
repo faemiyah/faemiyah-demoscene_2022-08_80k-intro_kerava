@@ -26,6 +26,9 @@
 #if !defined(dnload_glBindFramebuffer)
 #define dnload_glBindFramebuffer glBindFramebuffer
 #endif
+#if !defined(dnload_glBindRenderbuffer)
+#define dnload_glBindRenderbuffer glBindRenderbuffer
+#endif
 #if !defined(dnload_glBindTexture)
 #define dnload_glBindTexture glBindTexture
 #endif
@@ -98,6 +101,9 @@
 #if !defined(dnload_glEnableVertexAttribArray)
 #define dnload_glEnableVertexAttribArray glEnableVertexAttribArray
 #endif
+#if !defined(dnload_glFramebufferRenderbuffer)
+#define dnload_glFramebufferRenderbuffer glFramebufferRenderbuffer
+#endif
 #if !defined(dnload_glFramebufferTexture2D)
 #define dnload_glFramebufferTexture2D glFramebufferTexture2D
 #endif
@@ -109,6 +115,9 @@
 #endif
 #if !defined(dnload_glGenFramebuffers)
 #define dnload_glGenFramebuffers glGenFramebuffers
+#endif
+#if !defined(dnload_glGenRenderbuffers)
+#define dnload_glGenRenderbuffers glGenRenderbuffers
 #endif
 #if !defined(dnload_glGenTextures)
 #define dnload_glGenTextures glGenTextures
@@ -124,6 +133,9 @@
 #endif
 #if !defined(dnload_glPolygonOffset)
 #define dnload_glPolygonOffset glPolygonOffset
+#endif
+#if !defined(dnload_glRenderbufferStorage)
+#define dnload_glRenderbufferStorage glRenderbufferStorage
 #endif
 #if !defined(dnload_glShaderSource)
 #define dnload_glShaderSource glShaderSource

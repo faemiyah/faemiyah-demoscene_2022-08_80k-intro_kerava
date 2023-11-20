@@ -7,8 +7,8 @@ static const char *g_shader_vertex_skeleton = ""
 "attribute vec3 H;"
 "attribute vec3 L;"
 "attribute vec4 t;"
-"attribute vec4 E;"
-"uniform mat4 Q;"
+"attribute vec4 Q;"
+"uniform mat4 E;"
 "uniform mat4 Y;"
 "uniform mat3 T;"
 "uniform mat4 A[64];"
@@ -17,10 +17,10 @@ static const char *g_shader_vertex_skeleton = ""
 "varying vec3 f;"
 "void main()"
 "{"
-"ivec4 C=ivec4(E);"
+"ivec4 C=ivec4(Q);"
 "mat4 x=A[C.s]*t.s+A[C.t]*t.t+A[C.p]*t.p;"
 "vec3 t=(x*vec4(H,1.)).stp,H=mat3(x)*L;"
-"D=T*H,f=P-(Y*vec4(t,1.)).stp,gl_Position=Q*vec4(t,1.);"
+"D=T*H,f=P-(Y*vec4(t,1.)).stp,gl_Position=E*vec4(t,1.);"
 "}"
 #endif
 "";
@@ -56,14 +56,14 @@ static const char* g_shader_vertex_skeleton_attribute_bone_ref DNLOAD_RENAME_UNU
 #if defined(USE_LD)
 "bone_ref"
 #else
-"E"
+"Q"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_combined_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "combined_transform"
 #else
-"Q"
+"E"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_modelview_transform DNLOAD_RENAME_UNUSED = ""
