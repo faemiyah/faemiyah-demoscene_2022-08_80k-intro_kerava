@@ -6,15 +6,15 @@ static const char *g_shader_vertex_offscreen = ""
 #else
 "attribute vec3 H;"
 "attribute vec3 L;"
-"uniform mat4 Q;"
 "uniform mat4 E;"
+"uniform mat4 Q;"
 "uniform mat3 Y;"
-"uniform vec3 T;"
+"uniform vec3 P;"
 "varying vec3 D;"
 "varying vec3 f;"
 "void main()"
 "{"
-"D=Y*L,f=T-(E*vec4(H,1.)).stp,gl_Position=Q*vec4(H,1.);"
+"D=Y*L,f=P-(Q*vec4(H,1.)).stp,gl_Position=E*vec4(H,1.);"
 "}"
 #endif
 "";
@@ -43,14 +43,14 @@ static const char* g_shader_vertex_offscreen_uniform_combined_transform DNLOAD_R
 #if defined(USE_LD)
 "combined_transform"
 #else
-"Q"
+"E"
 #endif
 "";
 static const char* g_shader_vertex_offscreen_uniform_modelview_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "modelview_transform"
 #else
-"E"
+"Q"
 #endif
 "";
 static const char* g_shader_vertex_offscreen_uniform_normal_transform DNLOAD_RENAME_UNUSED = ""
@@ -64,7 +64,7 @@ static const char* g_shader_vertex_offscreen_uniform_camera_position DNLOAD_RENA
 #if defined(USE_LD)
 "camera_position"
 #else
-"T"
+"P"
 #endif
 "";
 #endif

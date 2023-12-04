@@ -4,10 +4,10 @@ static const char *g_shader_fragment_visualization = ""
 #if defined(USE_LD)
 "visualization.frag.glsl"
 #else
-"uniform float Q;"
+"uniform float E;"
 "void main()"
 "{"
-"gl_FragColor=vec4(vec3(0),C(Q,.0));"
+"gl_FragColor=vec4(vec3(0),C(E,.0));"
 "}"
 #endif
 "";
@@ -22,7 +22,7 @@ static const char* g_shader_fragment_visualization_uniform_color DNLOAD_RENAME_U
 #if defined(USE_LD)
 "color"
 #else
-"Q"
+"E"
 #endif
 "";
 #endif

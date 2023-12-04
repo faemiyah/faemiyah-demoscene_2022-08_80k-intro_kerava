@@ -1,6 +1,7 @@
 #ifndef VGL_FENCE_HPP
 #define VGL_FENCE_HPP
 
+#include "vgl_assert.hpp"
 #include "vgl_cond.hpp"
 #include "vgl_scoped_lock.hpp"
 #include "vgl_unique_ptr.hpp"
@@ -8,12 +9,15 @@
 namespace vgl
 {
 
+/// \cond
+class Fence;
+/// \endcond
+
 namespace detail
 {
 
 /// \cond
-class FenceData;
-void* internal_fence_data_wait(FenceData* op);
+void* internal_fence_wait(Fence& op);
 /// \endcond
 
 /// Internal fence state.
@@ -128,14 +132,6 @@ public:
     }
 
 public:
-    /// Accessor.
-    ///
-    /// \return Fence data.
-    constexpr detail::FenceData* getFenceData() const noexcept
-    {
-        return m_fence_data;
-    }
-
     /// Wait until the fence has executed and get the return value.
     ///
     /// \return Return value from the function.
@@ -147,9 +143,36 @@ public:
             BOOST_THROW_EXCEPTION(std::runtime_error("fence data has already been cleared"));
         }
 #endif
-        void* ret = detail::internal_fence_data_wait(m_fence_data);
-        m_fence_data = nullptr;
+        void* ret = detail::internal_fence_wait(*this);
+        VGL_ASSERT(!m_fence_data);
         return ret;
+    }
+
+    /// Release the fence data being held in this fence.
+    ///
+    /// \return Fence data pointer.
+    constexpr detail::FenceData* releaseData() noexcept
+    {
+        detail::FenceData* ret = m_fence_data;
+        m_fence_data = nullptr;
+        VGL_ASSERT(ret);
+        return ret;
+    }
+
+    /// Signal anyone waiting on the fence.
+    void signal()
+    {
+        VGL_ASSERT(m_fence_data);
+        m_fence_data->signal();
+    }
+
+    /// Wait on the fence.
+    ///
+    /// \param op Locked scope.
+    void wait(ScopedLock& op)
+    {
+        VGL_ASSERT(m_fence_data);
+        m_fence_data->wait(op);
     }
 
 private:
@@ -158,7 +181,7 @@ private:
     {
         if(m_fence_data)
         {
-            void* ret = detail::internal_fence_data_wait(m_fence_data);
+            void* ret = detail::internal_fence_wait(*this);
 #if defined(USE_LD)
             if(ret)
             {
@@ -167,6 +190,7 @@ private:
 #else
             (void)ret;
 #endif
+            VGL_ASSERT(!m_fence_data);
         }
     }
 
@@ -181,6 +205,15 @@ public:
         m_fence_data = other.m_fence_data;
         other.m_fence_data = nullptr;
         return *this;
+    }
+
+    /// Bool operator.
+    ///
+    /// \return Flag indicating if the fence is still active.
+    constexpr operator bool() const noexcept
+    {
+        VGL_ASSERT(m_fence_data);
+        return m_fence_data->isActive();
     }
 };
 

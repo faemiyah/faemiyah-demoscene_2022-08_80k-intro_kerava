@@ -144,7 +144,7 @@ private:
     void wait(Mutex::mutex_type* mutex)
     {
 #if defined(VGL_ENABLE_GTK)
-        dnload_g_cond_wait(&m_cond, mutex);
+        dnload_g_cond_wait(m_cond, mutex);
 #else
         int err = dnload_SDL_CondWait(m_cond, mutex);
 #if defined(USE_LD) && defined(DEBUG)

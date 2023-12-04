@@ -8,6 +8,11 @@
 #include "vgl_extern_sdl.hpp"
 #endif
 
+#if defined(USE_LD)
+#include <boost/throw_exception.hpp>
+#include <stdexcept>
+#endif
+
 namespace vgl
 {
 
@@ -104,7 +109,7 @@ private:
         if(m_mutex)
         {
 #if defined(VGL_ENABLE_GTK)
-            dnload_g_mutex_clear(&m_mutex);
+            dnload_g_mutex_clear(m_mutex);
             delete m_mutex;
 #else
             dnload_SDL_DestroyMutex(m_mutex);

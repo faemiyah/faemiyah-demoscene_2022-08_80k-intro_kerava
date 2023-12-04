@@ -1,6 +1,7 @@
 #ifndef VGL_TASK_DISPATCHER_HPP
 #define VGL_TASK_DISPATCHER_HPP
 
+#include "vgl_fence_pool.hpp"
 #include "vgl_task_queue.hpp"
 #include "vgl_thread.hpp"
 #include "vgl_vector.hpp"
@@ -19,13 +20,13 @@ private:
     vector<Thread> m_threads;
 
     /// Queue for tasks (any thread).
-    detail::TaskQueue m_tasks_any;
+    TaskQueue m_tasks_any;
 
     /// Queue for tasks (main thread).
-    detail::TaskQueue m_tasks_main;
+    TaskQueue m_tasks_main;
 
     /// Pool of free data structures for fences.
-    queue<detail::FenceDataUptr> m_fence_pool;
+    FencePool m_fence_pool;
 
     /// Guard mutex.
     Mutex m_mutex = Mutex(nullptr);
@@ -42,8 +43,12 @@ private:
     /// Number of threads waiting for tasks to execute.
     unsigned m_threads_waiting = 0;
 
+#if defined(USE_LD)
     /// Flag signifying the task queue is being destroyed.
+    ///
+    /// The flag is disabled for optimized build, because the program should never exit cleanly.
     bool m_quitting = false;
+#endif
 
 public:
     /// Global queue for tasks.
@@ -62,7 +67,8 @@ public:
     /// Destructor.
     ~TaskDispatcher()
     {
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(USE_LD)
+#if defined(DEBUG)
         if(!m_mutex.getMutexImpl())
         {
             if((m_main_thread_id != 0) ||
@@ -87,32 +93,17 @@ public:
             // Threads must be joined before destroying anything else.
             m_threads.clear();
         }
+#endif
     }
 
 private:
-    /// Acquire or reuse fence data (unlocked).
-    ///
-    /// \return Fence data structure to use.
-    detail::FenceData* acquireFenceData()
-    {
-        if(m_fence_pool.empty())
-        {
-            return new detail::FenceData();
-        }
-
-        VGL_ASSERT(m_fence_pool.front());
-        detail::FenceData* ret = m_fence_pool.front().release();
-        VGL_ASSERT(ret);
-        m_fence_pool.pop();
-        return ret;
-    }
     /// Acquire or reuse fence data (locked).
     ///
     /// \return Fence data structure to use.
-    detail::FenceData* acquireFenceDataSafe()
+    FenceData* acquireFenceDataSafe()
     {
         ScopedLock sl(m_mutex);
-        return acquireFenceData();
+        return m_fence_pool.acquire();
     }
 
     /// Immediately execute given task function.
@@ -122,7 +113,7 @@ private:
     /// \param params Function parameters.
     Fence immediateDispatch(TaskFunc func, void* params)
     {
-        detail::FenceData* ret = acquireFenceDataSafe();
+        FenceData* ret = acquireFenceDataSafe();
         ret->setActive(false);
         ret->setReturnValue(func(params));
         return Fence(ret);
@@ -133,9 +124,9 @@ private:
     /// \param queue Internal task queue.
     /// \param func Function to dispatch.
     /// \param params Function parameters.
-    detail::FenceData* internalDispatch(detail::TaskQueue& task_queue, TaskFunc func, void* params)
+    FenceData* internalDispatch(TaskQueue& task_queue, TaskFunc func, void* params)
     {
-        detail::FenceData* ret = acquireFenceData();
+        FenceData* ret = m_fence_pool.acquire();
         ret->setActive(true);
         ret->setReturnValue(nullptr);
         task_queue.emplace(ret, func, params);
@@ -191,7 +182,11 @@ private:
         ScopedLock sl(m_mutex);
         --m_threads_waiting;
 
+#if defined(USE_LD)
         while(!m_quitting)
+#else
+        for(;;)
+#endif
         {
             if((m_threads_active < m_concurrency) && !m_tasks_any.empty())
             {
@@ -237,12 +232,23 @@ public:
     {
         ScopedLock sl(m_mutex);
 
-        while(m_tasks_main.empty())
+#if defined(USE_LD)
+        while(!m_quitting)
+#else
+        for(;;)
+#endif
         {
-            m_tasks_main.wait(sl);
+            if(m_tasks_main.empty())
+            {
+                m_tasks_main.wait(sl);
+            }
+            else
+            {
+                return m_tasks_main.acquire();
+            }
         }
 
-        return m_tasks_main.acquire();
+        return Task();
     }
 
     /// Dispatch a task (any thread).
@@ -279,7 +285,7 @@ public:
         }
 
         ScopedLock sl(m_mutex);
-        detail::FenceData* data = internalDispatch(m_tasks_any, func, params);
+        FenceData* data = internalDispatch(m_tasks_any, func, params);
         spawnThreadIfBelowConcurrency();
         return Fence(data);
     }
@@ -297,14 +303,14 @@ public:
         }
 
         ScopedLock sl(m_mutex);
-        detail::FenceData* data = internalDispatch(m_tasks_main, func, params);
+        FenceData* data = internalDispatch(m_tasks_main, func, params);
         return Fence(data);
     }
 
     /// Mark fence data as inactive (from locked context) and signal threads waiting on it.
     ///
     /// \param op Fence data.
-    void signalFence(detail::FenceData& op)
+    void signalFence(FenceData& op)
     {
         {
             ScopedLock sl(m_mutex);
@@ -315,14 +321,14 @@ public:
 
     /// Wait on a fence internal state.
     ///
-    /// \param op Fence data.
+    /// \param op Fence.
     /// \return Stored return value from the fence.
-    void* waitFence(detail::FenceData* op)
+    void* waitFence(Fence& op)
     {
         ScopedLock sl(m_mutex);
 
         // Fence may have turned inactive before the wait point is reached.
-        if(op->isActive())
+        if(op)
         {
 #if defined(USE_LD) && defined(DEBUG)
             if(isMainThread())
@@ -344,7 +350,7 @@ public:
             }
 
             m_tasks_any.signal();
-            op->wait(sl);
+            op.wait(sl);
 
             if(is_spawned)
             {
@@ -352,8 +358,9 @@ public:
             }
         }
 
-        m_fence_pool.emplace(op);
-        return op->getReturnValue();
+        FenceData* data = op.releaseData();
+        m_fence_pool.emplace(data);
+        return data->getReturnValue();
     }
 
 private:
@@ -369,7 +376,7 @@ private:
 /// Internal signal of fence data.
 ///
 /// \param op Fence data.
-inline void internal_fence_data_signal(detail::FenceData& op)
+inline void internal_fence_data_signal(FenceData& op)
 {
     TaskDispatcher::g_task_dispatcher.signalFence(op);
 }
@@ -377,7 +384,7 @@ inline void internal_fence_data_signal(detail::FenceData& op)
 /// Internal wait for fence data on the task dispatcher.
 ///
 /// \param op Fence data.
-inline void* internal_fence_data_wait(detail::FenceData* op)
+inline void* internal_fence_wait(Fence& op)
 {
     return TaskDispatcher::g_task_dispatcher.waitFence(op);
 }
