@@ -43,14 +43,14 @@ public:
     /// Accessor.
     ///
     /// \return Return value stored in the fence data.
-    constexpr void* getReturnValue() const
+    constexpr void* getReturnValue() const noexcept
     {
         return m_return_value;
     }
     /// Setter.
     ///
     /// \param op Return value.
-    constexpr void setReturnValue(void* ret)
+    constexpr void setReturnValue(void* ret) noexcept
     {
         m_return_value = ret;
     }
@@ -58,14 +58,14 @@ public:
     /// Is the fence still active?
     ///
     /// \return True if fence is still active.
-    constexpr bool isActive() const
+    constexpr bool isActive() const noexcept
     {
         return m_active;
     }
     /// Setter.
     ///
     /// \param op New active status flag.
-    constexpr void setActive(bool op)
+    constexpr void setActive(bool op) noexcept
     {
         m_active = op;
     }
@@ -107,42 +107,31 @@ public:
     /// Constructor.
     ///
     /// \param op Mutex.
-    explicit Fence(detail::FenceData* op) :
+    constexpr explicit Fence(detail::FenceData* op) noexcept :
         m_fence_data(op)
     {
     }
 
     /// Move constructor.
     ///
-    /// \param op Source.
-    constexpr Fence(Fence&& op) noexcept :
-        m_fence_data(op.m_fence_data)
+    /// \param other Source object.
+    constexpr Fence(Fence&& other) noexcept :
+        Fence(other.m_fence_data)
     {
-        op.m_fence_data = nullptr;
+        other.m_fence_data = nullptr;
     }
 
     /// Destructor.
     ~Fence()
     {
-        if(m_fence_data)
-        {
-            void* ret = detail::internal_fence_data_wait(m_fence_data);
-#if defined(USE_LD)
-            if(ret)
-            {
-                BOOST_THROW_EXCEPTION(std::runtime_error("fence being destructed has unhandled return value"));
-            }
-#else
-            (void)ret;
-#endif
-        }
+        destruct();
     }
 
 public:
     /// Accessor.
     ///
     /// \return Fence data.
-    constexpr detail::FenceData* getFenceData() const
+    constexpr detail::FenceData* getFenceData() const noexcept
     {
         return m_fence_data;
     }
@@ -163,14 +152,34 @@ public:
         return ret;
     }
 
+private:
+    /// Internal destructor.
+    void destruct()
+    {
+        if(m_fence_data)
+        {
+            void* ret = detail::internal_fence_data_wait(m_fence_data);
+#if defined(USE_LD)
+            if(ret)
+            {
+                BOOST_THROW_EXCEPTION(std::runtime_error("fence being destructed has unhandled return value"));
+            }
+#else
+            (void)ret;
+#endif
+        }
+    }
+
 public:    
     /// Move operator.
     ///
-    /// \param op Source.
-    constexpr Fence& operator=(Fence&& op) noexcept
+    /// \param other Source object.
+    /// \return This object.
+    Fence& operator=(Fence&& other)
     {
-        m_fence_data = op.m_fence_data;
-        op.m_fence_data = nullptr;
+        destruct();
+        m_fence_data = other.m_fence_data;
+        other.m_fence_data = nullptr;
         return *this;
     }
 };

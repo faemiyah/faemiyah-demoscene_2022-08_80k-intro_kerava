@@ -28,7 +28,7 @@ private:
     queue<detail::FenceDataUptr> m_fence_pool;
 
     /// Guard mutex.
-    unique_ptr<Mutex> m_mutex;
+    Mutex m_mutex = Mutex(nullptr);
 
     /// Main thread ID.
     Thread::id_type m_main_thread_id = 0;
@@ -63,7 +63,7 @@ public:
     ~TaskDispatcher()
     {
 #if defined(USE_LD) && defined(DEBUG)
-        if(!m_mutex)
+        if(!m_mutex.getMutexImpl())
         {
             if((m_main_thread_id != 0) ||
                     !m_tasks_any.empty() ||
@@ -78,7 +78,7 @@ public:
 #endif
         {
             {
-                ScopedLock sl(*m_mutex);
+                ScopedLock sl(m_mutex);
                 m_quitting = true;
                 m_tasks_any.uninitialize();
                 m_tasks_main.uninitialize();
@@ -111,7 +111,7 @@ private:
     /// \return Fence data structure to use.
     detail::FenceData* acquireFenceDataSafe()
     {
-        ScopedLock sl(*m_mutex);
+        ScopedLock sl(m_mutex);
         return acquireFenceData();
     }
 
@@ -188,7 +188,7 @@ private:
     /// \return Thread return value.
     Thread::return_type threadFunc()
     {
-        ScopedLock sl(*m_mutex);
+        ScopedLock sl(m_mutex);
         --m_threads_waiting;
 
         while(!m_quitting)
@@ -227,7 +227,7 @@ public:
 
         m_tasks_any.initialize();
         m_tasks_main.initialize();
-        m_mutex.reset(new Mutex());
+        m_mutex = Mutex();
     }
 
     /// Gets a main context task.
@@ -235,7 +235,7 @@ public:
     /// \return Main context task.
     Task acquireMainTask()
     {
-        ScopedLock sl(*m_mutex);
+        ScopedLock sl(m_mutex);
 
         while(m_tasks_main.empty())
         {
@@ -251,7 +251,7 @@ public:
     /// \param params Function parameters.
     void dispatch(TaskFunc func, void* params)
     {
-        ScopedLock sl(*m_mutex);
+        ScopedLock sl(m_mutex);
         m_tasks_any.emplace(func, params);
         spawnThreadIfBelowConcurrency();
     }
@@ -261,7 +261,7 @@ public:
     /// \param params Function parameters.
     void dispatchMain(TaskFunc func, void* params)
     {
-        ScopedLock sl(*m_mutex);
+        ScopedLock sl(m_mutex);
         m_tasks_main.emplace(func, params);
     }
 
@@ -278,7 +278,7 @@ public:
             return immediateDispatch(func, params);
         }
 
-        ScopedLock sl(*m_mutex);
+        ScopedLock sl(m_mutex);
         detail::FenceData* data = internalDispatch(m_tasks_any, func, params);
         spawnThreadIfBelowConcurrency();
         return Fence(data);
@@ -296,7 +296,7 @@ public:
             return immediateDispatch(func, params);
         }
 
-        ScopedLock sl(*m_mutex);
+        ScopedLock sl(m_mutex);
         detail::FenceData* data = internalDispatch(m_tasks_main, func, params);
         return Fence(data);
     }
@@ -307,7 +307,7 @@ public:
     void signalFence(detail::FenceData& op)
     {
         {
-            ScopedLock sl(*m_mutex);
+            ScopedLock sl(m_mutex);
             op.setActive(false);
         }
         op.signal();
@@ -319,18 +319,18 @@ public:
     /// \return Stored return value from the fence.
     void* waitFence(detail::FenceData* op)
     {
-        ScopedLock sl(*m_mutex);
-
-#if defined(USE_LD) && defined(DEBUG)
-        if(isMainThread())
-        {
-            BOOST_THROW_EXCEPTION(std::runtime_error("cannot wait on main thread"));
-        }
-#endif
+        ScopedLock sl(m_mutex);
 
         // Fence may have turned inactive before the wait point is reached.
         if(op->isActive())
         {
+#if defined(USE_LD) && defined(DEBUG)
+            if(isMainThread())
+            {
+                BOOST_THROW_EXCEPTION(std::runtime_error("cannot wait on main thread"));
+            }
+#endif
+
             bool is_spawned = isSpawnedThread();
 
             // If waiting would lock the last concurrent thread, spawn a new thread.
