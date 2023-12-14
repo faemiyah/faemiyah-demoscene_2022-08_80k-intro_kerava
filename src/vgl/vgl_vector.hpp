@@ -3,6 +3,7 @@
 
 #include "vgl_algorithm.hpp"
 #include "vgl_realloc.hpp"
+#include "vgl_type_traits.hpp"
 #include "vgl_utility.hpp"
 
 namespace vgl
@@ -51,11 +52,29 @@ public:
         m_size(op),
         m_capacity(op)
     {
-        for(unsigned ii = 0; ii < op; ++ii)
+        if(!is_trivially_constructible<T>::value)
         {
-            new(&m_data[ii]) T();
+            for(unsigned ii = 0; ii < op; ++ii)
+            {
+                new(&m_data[ii]) T();
+            }
         }            
     }
+
+#if defined(USE_LD)
+    /// Consructor from iterators.
+    ///
+    /// \param first First iterator to insert.
+    /// \param last End of iteration.
+    template<typename InputIt> vector(InputIt first, InputIt last)
+    {
+        while(first != last)
+        {
+            emplace_back(*first);
+            ++first;
+        }
+    }
+#endif
 
     /// Move constructor.
     ///
@@ -109,11 +128,14 @@ private:
     }
 
     /// Clear internals.
-    constexpr void destructInternal()
+    constexpr void destructInternal() noexcept
     {
-        for(T &vv : *this)
+        if(!is_trivially_destructible<T>::value)
         {
-            vv.~T();
+            for(T &vv : *this)
+            {
+                vv.~T();
+            }
         }
     }
 
@@ -317,18 +339,36 @@ public:
             resizeInternal(cnt);
         }
 
-        for(unsigned ii = m_size; (ii < cnt); ++ii)
+        if(!is_trivially_constructible<T>::value)
         {
-            new(&m_data[ii]) T();
+            for(unsigned ii = m_size; (ii < cnt); ++ii)
+            {
+                new(&m_data[ii]) T();
+            }
         }
 
-        for(unsigned ii = m_size; (ii > cnt); --ii)
+        if(!is_trivially_destructible<T>::value)
         {
-            m_data[ii - 1].~T();
+            for(unsigned ii = m_size; (ii > cnt); --ii)
+            {
+                m_data[ii - 1].~T();
+            }
         }
 
         m_size = cnt;
     }
+
+#if defined(USE_LD)
+    /// Swap with another object.
+    ///
+    /// \param other Object to swap with.
+    void swap(vector& other)
+    {
+        vgl::swap(m_data, other.m_data);
+        vgl::swap(m_size, other.m_size);
+        vgl::swap(m_capacity, other.m_capacity);
+    }
+#endif
 
 public:
     /// Access operator.

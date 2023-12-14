@@ -9,8 +9,8 @@ static const char *g_shader_vertex_font = ""
 "attribute vec2 A;"
 "uniform mat4 Q;"
 "uniform mat4 Y;"
-"uniform mat3 P;"
-"uniform vec3 T;"
+"uniform mat3 T;"
+"uniform vec3 P;"
 "uniform vec3 X;"
 "uniform vec4 E;"
 "varying vec3 D;"
@@ -18,9 +18,9 @@ static const char *g_shader_vertex_font = ""
 "varying vec2 t;"
 "void main()"
 "{"
-"D=P*L,t=A;"
+"D=T*L,t=A;"
 "vec3 D=vec3(H.st*E.pq+E.st,H.p)+X;"
-"f=T-(Y*vec4(D,1.)).stp,gl_Position=Q*vec4(D,1.);"
+"f=P-(Y*vec4(D,1.)).stp,gl_Position=Q*vec4(D,1.);"
 "}"
 #endif
 "";
@@ -70,14 +70,14 @@ static const char* g_shader_vertex_font_uniform_normal_transform DNLOAD_RENAME_U
 #if defined(USE_LD)
 "normal_transform"
 #else
-"P"
+"T"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_camera_position DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "camera_position"
 #else
-"T"
+"P"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_glyph_position DNLOAD_RENAME_UNUSED = ""
