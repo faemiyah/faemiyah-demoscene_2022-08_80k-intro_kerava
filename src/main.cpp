@@ -531,7 +531,7 @@ public:
     /// \param op New frame index.
     void assignFrame(int op)
     {
-        vgl::ScopedLock sl(m_mutex);
+        vgl::ScopedAcquire sa(m_mutex);
 
         // Can never go negative.
         m_frame_idx = vgl::max(op, 0);
