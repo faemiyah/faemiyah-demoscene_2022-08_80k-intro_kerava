@@ -9,12 +9,12 @@ static const char *g_shader_vertex_offscreen = ""
 "uniform mat4 E;"
 "uniform mat4 Q;"
 "uniform mat3 Y;"
-"uniform vec3 T;"
+"uniform vec3 P;"
 "varying vec3 D;"
 "varying vec3 f;"
 "void main()"
 "{"
-"D=Y*L,f=T-(Q*vec4(H,1.)).stp,gl_Position=E*vec4(H,1.);"
+"D=Y*L,f=P-(Q*vec4(H,1.)).stp,gl_Position=E*vec4(H,1.);"
 "}"
 #endif
 "";
@@ -64,7 +64,7 @@ static const char* g_shader_vertex_offscreen_uniform_camera_position DNLOAD_RENA
 #if defined(USE_LD)
 "camera_position"
 #else
-"T"
+"P"
 #endif
 "";
 #endif

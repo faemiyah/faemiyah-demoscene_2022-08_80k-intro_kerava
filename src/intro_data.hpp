@@ -8355,25 +8355,25 @@ public:
     {
         // Some GPU data needs to be initialized in the main thread immediately.
         {
-            vgl::task_wait_main(taskfunc_graphics_immediate, this);
+            vgl::TaskDispatcher::wait_main(task_graphics_immediate, this);
         }
 
 #if defined(USE_LD)
         // If developer mode is on, load audio instead of generating it.
         if (g_flag_developer)
         {
-            vgl::Fence audio_fence = vgl::task_wait(taskfunc_audio_load, this);
+            vgl::Fence audio_fence = vgl::TaskDispatcher::wait(task_audio_load, this);
             initializeGraphics();
         }
         else
 #endif
         {
-            vgl::Fence audio_fence = vgl::task_wait(taskfunc_audio_generate, this);
+            vgl::Fence audio_fence = vgl::TaskDispatcher::wait(task_audio_generate, this);
             initializeGraphics();
         }
 
         // All other tasks complete, signal main thread about being ready.
-        vgl::task_dispatch_main(taskfunc_ready, this);
+        vgl::TaskDispatcher::dispatch_main(task_ready, this);
     }
 
 #if defined(USE_LD)
@@ -8418,7 +8418,7 @@ public:
     ///
     /// \param op Intro data passed as pointer.
     /// \return nullptr
-    static void* taskfunc_initialize(void* op)
+    static void* task_initialize(void* op)
     {
         IntroData* data = static_cast<IntroData*>(op);
         data->initialize();
@@ -8428,7 +8428,7 @@ public:
     /// Task function for signalling intro data is ready.
     ///
     /// \return Always nullptr.
-    static void* taskfunc_ready(void*)
+    static void* task_ready(void*)
     {
         return nullptr;
     }
@@ -8438,7 +8438,7 @@ private:
     ///
     /// \param op Intro data passed as pointer.
     /// \return nullptr
-    static void* taskfunc_audio_generate(void* op)
+    static void* task_audio_generate(void* op)
     {
         IntroData* data = static_cast<IntroData*>(op);
         data->initializeAudioGenerate();
@@ -8450,7 +8450,7 @@ private:
     ///
     /// \param op Intro data passed as pointer.
     /// \return nullptr
-    static void* taskfunc_audio_load(void* op)
+    static void* task_audio_load(void* op)
     {
         IntroData* data = static_cast<IntroData*>(op);
         data->initializeAudioLoad();
@@ -8522,7 +8522,7 @@ private:
     ///
     /// \param op Intro data passed as pointer.
     /// \return nullptr
-    static void* taskfunc_graphics_immediate(void* op)
+    static void* task_graphics_immediate(void* op)
     {
         IntroData* data = static_cast<IntroData*>(op);
         data->initializeGraphicsImmediate();

@@ -859,13 +859,13 @@ static void* intro_state_generate(void* op)
 
     // Need scope to wait on fences.
     {
-        vgl::Fence fence_next = vgl::task_wait(intro_state_generate_next, &frame_number);
-        vgl::Fence fence_fft = vgl::task_wait(intro_state_generate_mesh_fft, &frame_number);
-        vgl::Fence fence_wave = vgl::task_wait(intro_state_generate_mesh_wave, &frame_number);
+        vgl::Fence fence_next = vgl::TaskDispatcher::wait(intro_state_generate_next, &frame_number);
+        vgl::Fence fence_fft = vgl::TaskDispatcher::wait(intro_state_generate_mesh_fft, &frame_number);
+        vgl::Fence fence_wave = vgl::TaskDispatcher::wait(intro_state_generate_mesh_wave, &frame_number);
     }
 
     // Dispatch swap task.
-    vgl::task_dispatch_main(intro_state_move, op);
+    vgl::TaskDispatcher::dispatch_main(intro_state_move, op);
     return nullptr;
 }
 
@@ -881,10 +881,10 @@ static void* intro_state_move(void* op)
 
     // Dispatch main thread tasks first.
     // Must be before generate, as it could theoretically dispatch a new move task in front otherwise.
-    vgl::task_dispatch_main(intro_state_draw, nullptr);
+    vgl::TaskDispatcher::dispatch_main(intro_state_draw, nullptr);
 
     // Advance time based on time delta, then generate new frame.
-    vgl::task_dispatch(intro_state_generate, advance_frame_number(op));
+    vgl::TaskDispatcher::dispatch(intro_state_generate, advance_frame_number(op));
 
     return nullptr;
 }
@@ -992,15 +992,15 @@ void _start()
         "\nExtensions:  " << vgl::gl_extension_string(79, 13) << std::endl;
 #endif
 
-    vgl::tasks_initialize(3);
+    vgl::TaskDispatcher::initialize(3);
 
     vgl::FrameBuffer::initialize_default(static_cast<unsigned>(g_screen_w), static_cast<unsigned>(g_screen_h));
-    vgl::task_dispatch(IntroData::taskfunc_initialize, &g_data);
+    vgl::TaskDispatcher::dispatch(IntroData::task_initialize, &g_data);
 
     for(;;)
     {
-        vgl::Task task = vgl::task_acquire_main();
-        if(task() == IntroData::taskfunc_ready)
+        vgl::Task task = vgl::TaskDispatcher::acquire_main();
+        if(task() == IntroData::task_ready)
         {
             break;
         }
@@ -1054,9 +1054,9 @@ void _start()
     // Start draw loop.
 #if defined(USE_LD)
     g_time_delta = static_cast<int>(!g_flag_developer);
-    vgl::task_dispatch(intro_state_generate, &g_frame_number);
+    vgl::TaskDispatcher::dispatch(intro_state_generate, &g_frame_number);
 #else
-    vgl::task_dispatch(intro_state_generate, reinterpret_cast<void*>(static_cast<size_t>(INTRO_START)));
+    vgl::TaskDispatcher::dispatch(intro_state_generate, reinterpret_cast<void*>(static_cast<size_t>(INTRO_START)));
 #endif
 
     // Open audio device.
@@ -1426,7 +1426,7 @@ void _start()
 #endif
         for(;;)
         {
-            vgl::Task task = vgl::task_acquire_main();
+            vgl::Task task = vgl::TaskDispatcher::acquire_main();
 
             // If not draw, execute and continue.
             if(task.getFunc() != intro_state_draw)
@@ -1491,7 +1491,7 @@ void _start()
     // Wait until next loop so the parallel tasks are done.
     for(;;)
     {
-        vgl::Task task = vgl::task_acquire_main();
+        vgl::Task task = vgl::TaskDispatcher::acquire_main();
         if(task.getFunc() == intro_state_move)
         {
             break;

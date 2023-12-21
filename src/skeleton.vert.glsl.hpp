@@ -10,9 +10,9 @@ static const char *g_shader_vertex_skeleton = ""
 "attribute vec4 E;"
 "uniform mat4 Q;"
 "uniform mat4 Y;"
-"uniform mat3 T;"
+"uniform mat3 P;"
 "uniform mat4 A[64];"
-"uniform vec3 P;"
+"uniform vec3 T;"
 "varying vec3 D;"
 "varying vec3 f;"
 "void main()"
@@ -20,7 +20,7 @@ static const char *g_shader_vertex_skeleton = ""
 "ivec4 C=ivec4(E);"
 "mat4 x=A[C.s]*t.s+A[C.t]*t.t+A[C.p]*t.p;"
 "vec3 t=(x*vec4(H,1.)).stp,H=mat3(x)*L;"
-"D=T*H,f=P-(Y*vec4(t,1.)).stp,gl_Position=Q*vec4(t,1.);"
+"D=P*H,f=T-(Y*vec4(t,1.)).stp,gl_Position=Q*vec4(t,1.);"
 "}"
 #endif
 "";
@@ -77,7 +77,7 @@ static const char* g_shader_vertex_skeleton_uniform_normal_transform DNLOAD_RENA
 #if defined(USE_LD)
 "normal_transform"
 #else
-"T"
+"P"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_skeleton DNLOAD_RENAME_UNUSED = ""
@@ -91,7 +91,7 @@ static const char* g_shader_vertex_skeleton_uniform_camera_position DNLOAD_RENAM
 #if defined(USE_LD)
 "camera_position"
 #else
-"P"
+"T"
 #endif
 "";
 #endif

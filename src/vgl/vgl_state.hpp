@@ -419,8 +419,6 @@ public:
 class OpenGlStencilState
 {
 private:
-    /// Current clear stencil.
-    uint8_t m_clear_stencil = 0u;
     /// Current stencil function.
     GLenum m_stencil_func = GL_FALSE;
     /// Current stencil operation mode.
@@ -792,6 +790,14 @@ constexpr const char* gl_error_string(GLenum err)
 
     return "unknown error";
 }
+
+/// Gets GL string in safe manner.
+///
+/// If the returned string is nullptr, returns an empty string.
+///
+/// \param op String enumeration to get.
+/// \return Result of glGetString() packed into a string.
+std::string gl_get_string(GLenum op);
 
 /// Gets OpenGL extension string.
 ///
