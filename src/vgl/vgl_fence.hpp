@@ -54,7 +54,7 @@ public:
     }
 #endif
 
-    /// Accessor.a
+    /// Accessor.
     ///
     /// \return Return value stored in the fence data.
     constexpr void* getReturnValue() const noexcept
