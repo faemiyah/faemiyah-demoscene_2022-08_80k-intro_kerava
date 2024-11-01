@@ -4,23 +4,23 @@ static const char *g_shader_vertex_font = ""
 #if defined(USE_LD)
 "font.vert.glsl"
 #else
-"attribute vec3 H;"
-"attribute vec3 L;"
-"attribute vec2 A;"
-"uniform mat4 Q;"
-"uniform mat4 Y;"
-"uniform mat3 P;"
-"uniform vec3 T;"
-"uniform vec3 X;"
-"uniform vec4 E;"
-"varying vec3 D;"
-"varying vec3 f;"
+"attribute vec3 r;"
+"attribute vec3 o;"
+"attribute vec2 v;"
+"uniform mat4 f;"
+"uniform mat4 l;"
+"uniform mat3 m;"
+"uniform vec3 u;"
+"uniform vec3 b;"
+"uniform vec4 g;"
+"varying vec3 e;"
+"varying vec3 a;"
 "varying vec2 t;"
 "void main()"
 "{"
-"D=P*L,t=A;"
-"vec3 D=vec3(H.st*E.pq+E.st,H.p)+X;"
-"f=T-(Y*vec4(D,1.)).stp,gl_Position=Q*vec4(D,1.);"
+"e=m*o,t=v;"
+"vec3 e=vec3(r.rg*g.ba+g.rg,r.b)+b;"
+"a=u-(l*vec4(e,1.)).rgb,gl_Position=f*vec4(e,1.);"
 "}"
 #endif
 "";
@@ -35,63 +35,63 @@ static const char* g_shader_vertex_font_attribute_position DNLOAD_RENAME_UNUSED 
 #if defined(USE_LD)
 "position"
 #else
-"H"
+"r"
 #endif
 "";
 static const char* g_shader_vertex_font_attribute_normal DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "normal"
 #else
-"L"
+"o"
 #endif
 "";
 static const char* g_shader_vertex_font_attribute_texcoord DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "texcoord"
 #else
-"A"
+"v"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_combined_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "combined_transform"
 #else
-"Q"
+"f"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_modelview_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "modelview_transform"
 #else
-"Y"
+"l"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_normal_transform DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "normal_transform"
 #else
-"P"
+"m"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_camera_position DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "camera_position"
 #else
-"T"
+"u"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_glyph_position DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "glyph_position"
 #else
-"X"
+"b"
 #endif
 "";
 static const char* g_shader_vertex_font_uniform_glyph_quad DNLOAD_RENAME_UNUSED = ""
 #if defined(USE_LD)
 "glyph_quad"
 #else
-"E"
+"g"
 #endif
 "";
 #endif

@@ -1,6 +1,5 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.13)
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo")
-set(CMAKE_SYSTEM_VERSION "10.0.18362.0" CACHE STRING INTERNAL FORCE)
 project(kerava)
 
 enable_language(C)
