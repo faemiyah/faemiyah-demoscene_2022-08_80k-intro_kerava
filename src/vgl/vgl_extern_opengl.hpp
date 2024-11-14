@@ -1,10 +1,11 @@
 #ifndef VGL_EXTERN_OPENGL_HPP
 #define VGL_EXTERN_OPENGL_HPP
 
-/// \file
-/// \brief External include: OpenGL
+/// \file External include: OpenGL
 
-#if defined(USE_LD)
+#include "vgl_config.hpp"
+
+#if defined(VGL_USE_LD)
 
 #if defined(_WIN32) || defined(_WIN64)
 #define _USE_MATH_DEFINES
@@ -12,7 +13,10 @@
 #include "windows.h"
 #endif
 
-#if defined(VGL_ENABLE_GTK)
+#if defined(VGL_USE_GLES)
+#include "GLES2/gl2.h"
+#include "GLES2/gl2ext.h"
+#elif defined(VGL_ENABLE_GTK)
 #define GL_GLEXT_PROTOTYPES
 #include "GL/gl.h"
 #include "GL/glext.h"
