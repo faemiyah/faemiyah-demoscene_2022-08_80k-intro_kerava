@@ -18,7 +18,7 @@
 ///
 /// \param filename Filename to update.
 /// \param data Data to update with.
-void csg_update(std::string_view filename, const vgl::vector<int16_t>& data)
+void csg_update(vgl::string_view filename, const vgl::vector<int16_t>& data)
 {
     // Do not update unless in developer mode.
     if(!g_flag_developer)
@@ -518,18 +518,18 @@ private:
     /// Initialize audio (load).
     void initializeAudioLoad()
     {
-        std::string_view flac_filename("kerava.flac");
-        boost::filesystem::path fname = vgl::find_file(flac_filename);
+        vgl::string_view flac_filename("kerava.flac");
+        vgl::path fname = vgl::find_file(flac_filename);
         if(fname.empty())
         {
-            BOOST_THROW_EXCEPTION(std::runtime_error("could not locate '" + std::string(flac_filename) + "'"));
+            VGL_THROW_RUNTIME_ERROR("could not locate '" + vgl::to_string(fname) + "'");
         }
 
         // Initialize decoder.
         FLAC__StreamDecoder *decoder = FLAC__stream_decoder_new();
         if(!decoder)
         {
-            BOOST_THROW_EXCEPTION(std::runtime_error("could not create FLAC decoder"));
+            VGL_THROW_RUNTIME_ERROR("could not create FLAC decoder");
         }
         FLAC__stream_decoder_set_md5_checking(decoder, true);
 
@@ -537,20 +537,20 @@ private:
         FlacWriteStatus write_status(g_audio_buffer);
 
         // Attempt to decode.
-        FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_file(decoder, fname.string().c_str(),
-                flac_write_callback, flac_metadata_callback, flac_error_callback, &write_status);
+        FLAC__StreamDecoderInitStatus init_status = FLAC__stream_decoder_init_file(decoder,
+                vgl::to_string(fname).c_str(), flac_write_callback, flac_metadata_callback, flac_error_callback,
+                &write_status);
         if(init_status != FLAC__STREAM_DECODER_INIT_STATUS_OK)
         {
-            std::cout << "decode fail\n";
-            BOOST_THROW_EXCEPTION(std::runtime_error(std::string("FLAC__stream_decoder_init_file: ") +
-                        FLAC__StreamDecoderInitStatusString[init_status]));
+            VGL_THROW_RUNTIME_ERROR(vgl::string("FLAC__stream_decoder_init_file: ") +
+                    FLAC__StreamDecoderInitStatusString[init_status]);
         }
 
         if(!FLAC__stream_decoder_process_until_end_of_stream(decoder))
         {
             FLAC__StreamDecoderState decoder_state = FLAC__stream_decoder_get_state(decoder);
-            BOOST_THROW_EXCEPTION(std::runtime_error(std::string("FLAC__stream_decoder_process_until_end_of_stream: ") +
-                        FLAC__StreamDecoderStateString[decoder_state]));
+            VGL_THROW_RUNTIME_ERROR(vgl::string("FLAC__stream_decoder_process_until_end_of_stream: ") +
+                    FLAC__StreamDecoderStateString[decoder_state]);
         }
 
         // Decode successful.
@@ -915,7 +915,7 @@ private:
 #if defined(USE_LD)
                         if(tdiff <= 0)
                         {
-                            BOOST_THROW_EXCEPTION(std::runtime_error("chart spline not monotonically increasing"));
+                            VGL_THROW_RUNTIME_ERROR("chart spline not monotonically increasing");
                         }
 #endif
                     }
@@ -2816,7 +2816,7 @@ private:
                     m_mesh_building[ii] = lmesh.compile();
                 }
 #if defined(USE_LD)
-                addPreviewMesh(("building" + std::to_string(ii)).c_str(), *m_mesh_building[ii]);
+                addPreviewMesh(("building" + vgl::to_string(ii)).c_str(), *m_mesh_building[ii]);
 #endif
             }
         }
@@ -7405,7 +7405,7 @@ private:
 
                 m_mesh_terrain[kk] = lmesh.compile(false);
 #if defined(USE_LD)
-                addPreviewMesh(("terrain" + std::to_string(kk)).c_str(), *m_mesh_terrain[kk]);
+                addPreviewMesh(("terrain" + vgl::to_string(kk)).c_str(), *m_mesh_terrain[kk]);
 #endif
             }
 
@@ -8408,7 +8408,7 @@ public:
         if(!m_program_font.relink() || !m_program_font_overlay.relink() || !m_program_offscreen.relink() ||
                 !m_program_skeleton.relink() || !m_program_visualization.relink() || !m_program_post.relink())
         {
-            BOOST_THROW_EXCEPTION(std::runtime_error("program recreation failure"));
+            VGL_THROW_RUNTIME_ERROR("program recreation failure");
         }
     }
 #endif
@@ -8464,8 +8464,8 @@ private:
     /// \param client_data User-defined data.
     static void flac_error_callback(const FLAC__StreamDecoder* decoder, FLAC__StreamDecoderErrorStatus status, void* client_data)
     {
-        BOOST_THROW_EXCEPTION(std::runtime_error(std::string("FLAC error callback: ") +
-                    FLAC__StreamDecoderErrorStatusString[status]));
+        VGL_THROW_RUNTIME_ERROR(vgl::string("FLAC error callback: ") +
+                FLAC__StreamDecoderErrorStatusString[status]);
         (void)decoder;
         (void)client_data;
     }
@@ -8483,8 +8483,8 @@ private:
         static unsigned bps = metadata->data.stream_info.bits_per_sample;
         if((channels != 2) || (sample_rate != 44100) || (bps != 16))
         {
-            BOOST_THROW_EXCEPTION(std::runtime_error("incompatible FLAC stream: " + std::to_string(channels) + "ch " +
-                        std::to_string(sample_rate) + "Hz " + std::to_string(bps) + "bps"));
+            VGL_THROW_RUNTIME_ERROR("incompatible FLAC stream: " + vgl::to_string(channels) + "ch " +
+                    vgl::to_string(sample_rate) + "Hz " + vgl::to_string(bps) + "bps");
         }
         (void)decoder;
         (void)client_data;

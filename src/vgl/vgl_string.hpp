@@ -572,6 +572,10 @@ public:
     }
 
 #if defined(USE_LD)
+    /// Insert into the string.
+    /// \param pos Insertion position.
+    /// \param s
+
     /// Swap with another object.
     ///
     /// \param other Object to swap with.
