@@ -1351,16 +1351,20 @@ public:
             const GlyphMeshArray& glyph = g_data.getGlyph();
             vgl::vec2 fs = vgl::vec2(1.0f, static_cast<float>(g_screen_w) / static_cast<float>(g_screen_h)) * 0.05f;
             {
-                std::string ftime = g_frame_counter.getFrameTime();
-                draw_text(m_queue, vgl::vec3(-0.98f, 0.89f, 0.0f), vgl::mat4::identity(), font, glyph, fs, ftime.c_str());
+                std::string gtime = g_frame_counter.getGenerationTime();
+                draw_text(m_queue, vgl::vec3(-0.98f, 0.89f, 0.0f), vgl::mat4::identity(), font, glyph, fs, gtime.c_str());
             }
             {
-                std::string ftime = g_frame_counter.getSwapTime();
+                std::string ftime = g_frame_counter.getFrameTime();
                 draw_text(m_queue, vgl::vec3(-0.98f, 0.80f, 0.0f), vgl::mat4::identity(), font, glyph, fs, ftime.c_str());
             }
             {
-                std::string ftime = g_frame_counter.getFramerate();
+                std::string ftime = g_frame_counter.getSwapTime();
                 draw_text(m_queue, vgl::vec3(-0.98f, 0.71f, 0.0f), vgl::mat4::identity(), font, glyph, fs, ftime.c_str());
+            }
+            {
+                std::string ftime = g_frame_counter.getFramerate();
+                draw_text(m_queue, vgl::vec3(-0.98f, 0.62f, 0.0f), vgl::mat4::identity(), font, glyph, fs, ftime.c_str());
             }
         }
 #endif

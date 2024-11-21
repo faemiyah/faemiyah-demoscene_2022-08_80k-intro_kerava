@@ -1,6 +1,7 @@
 #include "dnload.h"
 
 #if defined(USE_LD)
+#include <atomic>
 #include "image_png.hpp"
 #include <boost/algorithm/string.hpp>
 #include <boost/exception/diagnostic_information.hpp>
@@ -303,6 +304,9 @@ private:
         /// Timestamp for this frame (after swap).
         int64_t m_stamp;
 
+        /// Frame generation time (parallel to draw and swap).
+        int64_t m_generate_time;
+
         /// Frame time until end of draw.
         int64_t m_frame_time;
 
@@ -313,10 +317,12 @@ private:
         /// Constructor.
         ///
         /// \param stamp Timestamp.
+        /// \param gtime Generation time.
         /// \param ftime Frame time.
         /// \param stime swap time.
-        FrameTime(int64_t stamp, int64_t ftime, int64_t stime) :
+        FrameTime(int64_t stamp, int64_t gtime, int64_t ftime, int64_t stime) :
             m_stamp(stamp),
+            m_generate_time(gtime),
             m_frame_time(ftime),
             m_swap_time(stime)
         {
@@ -326,6 +332,12 @@ private:
 private:
     /// Queue of frame times.
     vgl::queue<FrameTime> m_queue;
+
+    /// Last generation time.
+    std::atomic<int64_t> m_last_generation_time = 0;
+
+    /// Total generation time.
+    int64_t m_total_generation_time = 0;
 
     /// Total frame time.
     int64_t m_total_frame_time = 0;
@@ -373,11 +385,13 @@ public:
     /// \param tend Timestamp after swap.
     void addFrame(int64_t tstart, int64_t tmid, int64_t tend)
     {
+        int64_t gtime = m_last_generation_time;
         int64_t ftime = timestamp_diff(tstart, tmid);
         int64_t stime = timestamp_diff(tstart, tend);
 
         // Add new frame, update total times.
-        m_queue.emplace(tend, ftime, stime);
+        m_queue.emplace(tend, gtime, ftime, stime);
+        m_total_generation_time += gtime;
         m_total_frame_time += ftime;
         m_total_swap_time += stime;
 
@@ -388,6 +402,7 @@ public:
 
             if(timestamp_diff(first.m_stamp, tend) >= NSEC_MUL)
             {
+                m_total_generation_time -= first.m_generate_time;
                 m_total_frame_time -= first.m_frame_time;
                 m_total_swap_time -= first.m_swap_time;
                 m_queue.pop();
@@ -395,6 +410,12 @@ public:
             }
             break;
         }
+    }
+
+    /// Get generation time.
+    std::string getGenerationTime() const
+    {
+        return getAverageFrameTime(m_total_generation_time);
     }
 
     /// Get frame time.
@@ -419,6 +440,16 @@ public:
     std::string getFramerate() const
     {
         return std::to_string(m_queue.size());
+    }
+
+    /// Sets the last generation time.
+    ///
+    /// This is asynchronous, but gives good enough of an idea.
+    ///
+    /// \param op Last generation time.
+    void setLastGenerationTime(int64_t op)
+    {
+        m_last_generation_time = op;
     }
 
 public:
@@ -855,6 +886,7 @@ static void* intro_state_draw(void*)
 /// \return nullptr
 static void* intro_state_generate(void* op)
 {
+    int64_t tstart = g_frame_counter.get_timespec_timestamp();
     int frame_number = get_frame_number(op);
 
     // Need scope to wait on fences.
@@ -866,6 +898,8 @@ static void* intro_state_generate(void* op)
 
     // Dispatch swap task.
     vgl::TaskDispatcher::dispatch_main(intro_state_move, op);
+    int64_t tend = g_frame_counter.get_timespec_timestamp();
+    g_frame_counter.setLastGenerationTime(tend - tstart);
     return nullptr;
 }
 
