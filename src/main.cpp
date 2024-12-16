@@ -1009,6 +1009,20 @@ void _start()
     dnload_SDL_GL_CreateContext(g_sdl_window);
     dnload_SDL_ShowCursor(g_flag_developer);
 
+#if defined(USE_LD)
+    {
+        int err = SDL_GL_SetSwapInterval(-1);
+        if (err == -1)
+        {
+            err = SDL_GL_SetSwapInterval(0);
+            if (err)
+            {
+                std::cerr << "SDL_GL_SetSwapInterval(): " << SDL_GetError() << std::endl;
+            }
+        }
+    }
+#endif
+
 #if defined(USE_LD) && !defined(DNLOAD_GLESV2)
     {
         GLenum err = glewInit();

@@ -1288,6 +1288,7 @@ public:
         // Post phase.
         m_queue.push(screen);
         m_queue.pushBlend(vgl::DISABLED);
+        m_queue.pushClear(vgl::uvec4(255u, 255u, 255u, 0u), 1.0f);
         m_queue.pushDepth(GL_FALSE, true);
 
         {
