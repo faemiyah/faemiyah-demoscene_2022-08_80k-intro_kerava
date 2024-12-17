@@ -206,6 +206,7 @@ static void asm_exit(void)
 #define dnload_glFramebufferTexture2D glFramebufferTexture2D
 #define dnload_qsort qsort
 #define dnload_sinf sinf
+#define dnload_glGenVertexArrays glGenVertexArrays
 #define dnload_SDL_GL_SetAttribute SDL_GL_SetAttribute
 #define dnload_fftw_execute fftw_execute
 #define dnload_glClear glClear
@@ -268,7 +269,6 @@ static void asm_exit(void)
 #define dnload_glBindFramebuffer glBindFramebuffer
 #define dnload_glTexImage2D glTexImage2D
 #define dnload_FT_Get_Char_Index FT_Get_Char_Index
-#define dnload_glDeleteBuffers glDeleteBuffers
 #define dnload_glGenFramebuffers glGenFramebuffers
 #define dnload_realloc realloc
 #define dnload_glDisable glDisable
@@ -288,6 +288,7 @@ static void asm_exit(void)
 #define dnload_glGetAttribLocation glGetAttribLocation
 #define dnload_SDL_GetTicks SDL_GetTicks
 #define dnload_exp2f exp2f
+#define dnload_glBindVertexArray glBindVertexArray
 #define dnload_glActiveTexture glActiveTexture
 #define dnload_logf logf
 #define dnload_FT_Load_Glyph FT_Load_Glyph
@@ -298,6 +299,7 @@ static void asm_exit(void)
 #define dnload_glCullFace glCullFace
 #define dnload_opus_decoder_create opus_decoder_create
 #define dnload_lrintf lrintf
+#define dnload_SDL_GL_SetSwapInterval SDL_GL_SetSwapInterval
 #define dnload_rand gnu_rand
 #define dnload_glEnableVertexAttribArray glEnableVertexAttribArray
 #define dnload_glFramebufferRenderbuffer glFramebufferRenderbuffer
@@ -316,6 +318,7 @@ static void asm_exit(void)
 #define dnload_glFramebufferTexture2D g_symbol_table.df_glFramebufferTexture2D
 #define dnload_qsort g_symbol_table.df_qsort
 #define dnload_sinf g_symbol_table.df_sinf
+#define dnload_glGenVertexArrays g_symbol_table.df_glGenVertexArrays
 #define dnload_SDL_GL_SetAttribute g_symbol_table.df_SDL_GL_SetAttribute
 #define dnload_fftw_execute g_symbol_table.df_fftw_execute
 #define dnload_glClear g_symbol_table.df_glClear
@@ -378,7 +381,6 @@ static void asm_exit(void)
 #define dnload_glBindFramebuffer g_symbol_table.df_glBindFramebuffer
 #define dnload_glTexImage2D g_symbol_table.df_glTexImage2D
 #define dnload_FT_Get_Char_Index g_symbol_table.df_FT_Get_Char_Index
-#define dnload_glDeleteBuffers g_symbol_table.df_glDeleteBuffers
 #define dnload_glGenFramebuffers g_symbol_table.df_glGenFramebuffers
 #define dnload_realloc g_symbol_table.df_realloc
 #define dnload_glDisable g_symbol_table.df_glDisable
@@ -398,16 +400,18 @@ static void asm_exit(void)
 #define dnload_glGetAttribLocation g_symbol_table.df_glGetAttribLocation
 #define dnload_SDL_GetTicks g_symbol_table.df_SDL_GetTicks
 #define dnload_exp2f g_symbol_table.df_exp2f
+#define dnload_glBindVertexArray g_symbol_table.df_glBindVertexArray
 #define dnload_glActiveTexture g_symbol_table.df_glActiveTexture
 #define dnload_logf g_symbol_table.df_logf
 #define dnload_FT_Load_Glyph g_symbol_table.df_FT_Load_Glyph
 #define dnload_SDL_GL_CreateContext g_symbol_table.df_SDL_GL_CreateContext
 #define dnload_glTexParameterf g_symbol_table.df_glTexParameterf
 #define dnload_glTexParameteri g_symbol_table.df_glTexParameteri
-#define dnload_floorf g_symbol_table.df_floorf
+#define dnload_floorf floorf
 #define dnload_glCullFace g_symbol_table.df_glCullFace
 #define dnload_opus_decoder_create g_symbol_table.df_opus_decoder_create
 #define dnload_lrintf g_symbol_table.df_lrintf
+#define dnload_SDL_GL_SetSwapInterval g_symbol_table.df_SDL_GL_SetSwapInterval
 #define dnload_rand g_symbol_table.df_rand
 #define dnload_glEnableVertexAttribArray g_symbol_table.df_glEnableVertexAttribArray
 #define dnload_glFramebufferRenderbuffer g_symbol_table.df_glFramebufferRenderbuffer
@@ -429,6 +433,7 @@ static struct SymbolTableStruct
     void (DNLOAD_APIENTRY *df_glFramebufferTexture2D)(GLenum, GLenum, GLenum, GLuint, GLint);
     void (*df_qsort)(void*, size_t, size_t, int (*)(const void*, const void*));
     float (*df_sinf)(float);
+    void (DNLOAD_APIENTRY *df_glGenVertexArrays)(GLsizei, GLuint*);
     int (*df_SDL_GL_SetAttribute)(SDL_GLattr, int);
     void (*df_fftw_execute)(const fftw_plan);
     void (DNLOAD_APIENTRY *df_glClear)(GLbitfield);
@@ -490,7 +495,6 @@ static struct SymbolTableStruct
     void (DNLOAD_APIENTRY *df_glBindFramebuffer)(GLenum, GLuint);
     void (DNLOAD_APIENTRY *df_glTexImage2D)(GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid*);
     FT_UInt (*df_FT_Get_Char_Index)(FT_Face, FT_ULong);
-    void (DNLOAD_APIENTRY *df_glDeleteBuffers)(GLsizei, const GLuint*);
     void (DNLOAD_APIENTRY *df_glGenFramebuffers)(GLsizei, GLuint*);
     void* (*df_realloc)(void*, size_t);
     void (DNLOAD_APIENTRY *df_glDisable)(GLenum);
@@ -510,16 +514,17 @@ static struct SymbolTableStruct
     GLint (DNLOAD_APIENTRY *df_glGetAttribLocation)(GLuint, const GLchar*);
     uint32_t (*df_SDL_GetTicks)(void);
     float (*df_exp2f)(float);
+    void (DNLOAD_APIENTRY *df_glBindVertexArray)(GLuint);
     void (DNLOAD_APIENTRY *df_glActiveTexture)(GLenum);
     float (*df_logf)(float);
     FT_Error (*df_FT_Load_Glyph)(FT_Face, FT_UInt, FT_Int32);
     SDL_GLContext (*df_SDL_GL_CreateContext)(SDL_Window*);
     void (DNLOAD_APIENTRY *df_glTexParameterf)(GLenum, GLenum, GLfloat);
     void (DNLOAD_APIENTRY *df_glTexParameteri)(GLenum, GLenum, GLint);
-    float (*df_floorf)(float);
     void (DNLOAD_APIENTRY *df_glCullFace)(GLenum);
     OpusDecoder* (*df_opus_decoder_create)(opus_int32, int, int*);
     long (*df_lrintf)(float);
+    int (*df_SDL_GL_SetSwapInterval)(int);
     int (*df_rand)(void);
     void (DNLOAD_APIENTRY *df_glEnableVertexAttribArray)(GLuint);
     void (DNLOAD_APIENTRY *df_glFramebufferRenderbuffer)(GLenum, GLenum, GLint, GLuint);
@@ -537,6 +542,7 @@ static struct SymbolTableStruct
     (void (DNLOAD_APIENTRY *)(GLenum, GLenum, GLenum, GLuint, GLint))0x18781f65,
     (void (*)(void*, size_t, size_t, int (*)(const void*, const void*)))0x19008aaf,
     (float (*)(float))0x1ab23d2e,
+    (void (DNLOAD_APIENTRY *)(GLsizei, GLuint*))0x1bdfc709,
     (int (*)(SDL_GLattr, int))0x1da21ab0,
     (void (*)(const fftw_plan))0x1e9bcf9,
     (void (DNLOAD_APIENTRY *)(GLbitfield))0x1fd92088,
@@ -598,7 +604,6 @@ static struct SymbolTableStruct
     (void (DNLOAD_APIENTRY *)(GLenum, GLuint))0xa0fdff6b,
     (void (DNLOAD_APIENTRY *)(GLenum, GLint, GLint, GLsizei, GLsizei, GLint, GLenum, GLenum, const GLvoid*))0xa259532b,
     (FT_UInt (*)(FT_Face, FT_ULong))0xb1177d43,
-    (void (DNLOAD_APIENTRY *)(GLsizei, const GLuint*))0xb1319e23,
     (void (DNLOAD_APIENTRY *)(GLsizei, GLuint*))0xb1503371,
     (void* (*)(void*, size_t))0xb1ae4962,
     (void (DNLOAD_APIENTRY *)(GLenum))0xb5f7c43,
@@ -618,16 +623,17 @@ static struct SymbolTableStruct
     (GLint (DNLOAD_APIENTRY *)(GLuint, const GLchar*))0xceb27dd0,
     (uint32_t (*)(void))0xd1d0b104,
     (float (*)(float))0xd2cc2a11,
+    (void (DNLOAD_APIENTRY *)(GLuint))0xd35805d3,
     (void (DNLOAD_APIENTRY *)(GLenum))0xd7d4d450,
     (float (*)(float))0xd7efe342,
     (FT_Error (*)(FT_Face, FT_UInt, FT_Int32))0xdb48d8e4,
     (SDL_GLContext (*)(SDL_Window*))0xdba45bd,
     (void (DNLOAD_APIENTRY *)(GLenum, GLenum, GLfloat))0xdefef0bf,
     (void (DNLOAD_APIENTRY *)(GLenum, GLenum, GLint))0xdefef0c2,
-    (float (*)(float))0xe0f62bba,
     (void (DNLOAD_APIENTRY *)(GLenum))0xe379fd94,
     (OpusDecoder* (*)(opus_int32, int, int*))0xe3ffda57,
     (long (*)(float))0xe5e5b9bd,
+    (int (*)(int))0xe7f397e4,
     (int (*)(void))0xe83af065,
     (void (DNLOAD_APIENTRY *)(GLuint))0xe9e99723,
     (void (DNLOAD_APIENTRY *)(GLenum, GLenum, GLint, GLuint))0xea8c7dfe,
@@ -843,7 +849,7 @@ static void* dnload_find_symbol(uint32_t hash)
 static void dnload(void)
 {
     unsigned ii;
-    for(ii = 0; (106 > ii); ++ii)
+    for(ii = 0; (107 > ii); ++ii)
     {
         void **iter = ((void**)&g_symbol_table) + ii;
         *iter = dnload_find_symbol(*(uint32_t*)iter);
