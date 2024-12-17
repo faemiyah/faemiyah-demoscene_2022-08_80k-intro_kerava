@@ -975,8 +975,11 @@ static SDL_AudioSpec audio_spec =
 //######################################
 
 #if defined(USE_LD)
-/// \brief Intro body function.
-void intro(bool flag_fullscreen)
+/// Intro body function.
+///
+/// \param flag_fullscreen Fullscreen toggle.
+/// \param flag_vsync Vsync toggle.
+void intro(bool flag_fullscreen, bool flag_vsync)
 #else
 void _start()
 #define flag_fullscreen SCREEN_F
@@ -1011,16 +1014,20 @@ void _start()
 
 #if defined(USE_LD)
     {
-        int err = SDL_GL_SetSwapInterval(-1);
-        if (err == -1)
+        int swap_interval = flag_vsync ? -1 : 0;
+        int err = SDL_GL_SetSwapInterval(swap_interval);
+        if(err && (swap_interval < 0))
         {
-            err = SDL_GL_SetSwapInterval(0);
-            if (err)
-            {
-                std::cerr << "SDL_GL_SetSwapInterval(): " << SDL_GetError() << std::endl;
-            }
+            swap_interval = 1;
+            err = SDL_GL_SetSwapInterval(swap_interval);
+        }
+        if (err)
+        {
+            std::cerr << "SDL_GL_SetSwapInterval(" << swap_interval << "): " << SDL_GetError() << std::endl;
         }
     }
+#else
+    dnload_SDL_GL_SetSwapInterval(0);
 #endif
 
 #if defined(USE_LD) && !defined(DNLOAD_GLESV2)
@@ -1567,6 +1574,7 @@ void _start()
 int DNLOAD_MAIN(int argc, char **argv)
 {
     bool option_fullscreen = false;
+    bool option_vsync = false;
     bool option_windowed = false;
 
     try
@@ -1586,6 +1594,7 @@ int DNLOAD_MAIN(int argc, char **argv)
                 ("resolution,r", po::value<std::string>(), "Resolution to use, specify as 'WIDTHxHEIGHT' or 'HEIGHTp'.")
                 ("seed,s", po::value<unsigned>(), "RNG seed, used when iterating generation settings.")
                 ("ticks,t", po::value<int>(), "Timestamp to start from in frames.")
+                ("vsync,y", "Enable vertical retrace synchronization.")
                 ("window,w", "Start in windowed mode as opposed to fullscreen.");
 
             po::variables_map vmap;
@@ -1654,6 +1663,10 @@ int DNLOAD_MAIN(int argc, char **argv)
                 g_screen_w = static_cast<int>(resolution.first);
                 g_screen_h = static_cast<int>(resolution.second);
             }
+            if(vmap.count("vsync"))
+            {
+                option_vsync = true;
+            }
             if(vmap.count("window"))
             {
                 option_windowed = true;
@@ -1689,7 +1702,7 @@ int DNLOAD_MAIN(int argc, char **argv)
             (option_windowed ? false :
              (!g_flag_developer && !(g_flag_record_audio || g_flag_record_video)));
 
-        intro(fullscreen);
+        intro(fullscreen, option_vsync);
     }
     catch(const boost::exception &err)
     {
