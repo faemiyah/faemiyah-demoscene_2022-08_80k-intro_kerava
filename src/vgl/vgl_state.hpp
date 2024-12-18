@@ -520,26 +520,6 @@ public:
 
 }
 
-#if 0
-
-/// Enable one vertex attribute.
-///
-/// \param op Index of array to enable.
-inline void attrib_array_enable(unsigned op)
-{
-    detail::OpenGlAttribState::g_opengl_attrib_state.enableAttribArray(op);
-}
-
-/// Disable extra vertex attribute arrays.
-///
-/// \param op Index of first array to disable.
-inline void attrib_array_disable_from(unsigned op)
-{
-    detail::OpenGlAttribState::g_opengl_attrib_state.disableAttribArraysFrom(op);
-}
-
-#endif
-
 /// Set blending mode.
 ///
 /// \param op New blending mode.

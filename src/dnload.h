@@ -239,7 +239,6 @@ static void asm_exit(void)
 #define dnload_fftw_destroy_plan fftw_destroy_plan
 #define dnload_SDL_WaitThread SDL_WaitThread
 #define dnload_glDrawElements glDrawElements
-#define dnload_glDisableVertexAttribArray glDisableVertexAttribArray
 #define dnload_SDL_PollEvent SDL_PollEvent
 #define dnload_glDeleteShader glDeleteShader
 #define dnload_glDepthMask glDepthMask
@@ -351,7 +350,6 @@ static void asm_exit(void)
 #define dnload_fftw_destroy_plan g_symbol_table.df_fftw_destroy_plan
 #define dnload_SDL_WaitThread g_symbol_table.df_SDL_WaitThread
 #define dnload_glDrawElements g_symbol_table.df_glDrawElements
-#define dnload_glDisableVertexAttribArray g_symbol_table.df_glDisableVertexAttribArray
 #define dnload_SDL_PollEvent g_symbol_table.df_SDL_PollEvent
 #define dnload_glDeleteShader g_symbol_table.df_glDeleteShader
 #define dnload_glDepthMask g_symbol_table.df_glDepthMask
@@ -407,7 +405,7 @@ static void asm_exit(void)
 #define dnload_SDL_GL_CreateContext g_symbol_table.df_SDL_GL_CreateContext
 #define dnload_glTexParameterf g_symbol_table.df_glTexParameterf
 #define dnload_glTexParameteri g_symbol_table.df_glTexParameteri
-#define dnload_floorf floorf
+#define dnload_floorf g_symbol_table.df_floorf
 #define dnload_glCullFace g_symbol_table.df_glCullFace
 #define dnload_opus_decoder_create g_symbol_table.df_opus_decoder_create
 #define dnload_lrintf g_symbol_table.df_lrintf
@@ -465,7 +463,6 @@ static struct SymbolTableStruct
     void (*df_fftw_destroy_plan)(fftw_plan);
     void (*df_SDL_WaitThread)(SDL_Thread*, int*);
     void (DNLOAD_APIENTRY *df_glDrawElements)(GLenum, GLsizei, GLenum, const GLvoid*);
-    void (DNLOAD_APIENTRY *df_glDisableVertexAttribArray)(GLuint);
     int (*df_SDL_PollEvent)(SDL_Event*);
     void (DNLOAD_APIENTRY *df_glDeleteShader)(GLuint);
     void (DNLOAD_APIENTRY *df_glDepthMask)(GLboolean);
@@ -521,6 +518,7 @@ static struct SymbolTableStruct
     SDL_GLContext (*df_SDL_GL_CreateContext)(SDL_Window*);
     void (DNLOAD_APIENTRY *df_glTexParameterf)(GLenum, GLenum, GLfloat);
     void (DNLOAD_APIENTRY *df_glTexParameteri)(GLenum, GLenum, GLint);
+    float (*df_floorf)(float);
     void (DNLOAD_APIENTRY *df_glCullFace)(GLenum);
     OpusDecoder* (*df_opus_decoder_create)(opus_int32, int, int*);
     long (*df_lrintf)(float);
@@ -574,7 +572,6 @@ static struct SymbolTableStruct
     (void (*)(fftw_plan))0x5f9b574a,
     (void (*)(SDL_Thread*, int*))0x62469d23,
     (void (DNLOAD_APIENTRY *)(GLenum, GLsizei, GLenum, const GLvoid*))0x64074f40,
-    (void (DNLOAD_APIENTRY *)(GLuint))0x647c0b08,
     (int (*)(SDL_Event*))0x64949d97,
     (void (DNLOAD_APIENTRY *)(GLuint))0x686f65b5,
     (void (DNLOAD_APIENTRY *)(GLboolean))0x695018a,
@@ -630,6 +627,7 @@ static struct SymbolTableStruct
     (SDL_GLContext (*)(SDL_Window*))0xdba45bd,
     (void (DNLOAD_APIENTRY *)(GLenum, GLenum, GLfloat))0xdefef0bf,
     (void (DNLOAD_APIENTRY *)(GLenum, GLenum, GLint))0xdefef0c2,
+    (float (*)(float))0xe0f62bba,
     (void (DNLOAD_APIENTRY *)(GLenum))0xe379fd94,
     (OpusDecoder* (*)(opus_int32, int, int*))0xe3ffda57,
     (long (*)(float))0xe5e5b9bd,
