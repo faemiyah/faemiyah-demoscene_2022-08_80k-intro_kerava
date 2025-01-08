@@ -5,12 +5,15 @@
 #include "vgl_buffer.hpp"
 #include "vgl_geometry_handle.hpp"
 #include "vgl_glsl_program.hpp"
-#include "vgl_ivec3.hpp"
 #include "vgl_packed_data.hpp"
 #include "vgl_state.hpp"
 #include "vgl_vec2.hpp"
 #include "vgl_vec3.hpp"
 #include "vgl_uvec4.hpp"
+
+#if defined(VGL_ENABLE_VERTEX_NORMAL_PACKING)
+#include "vgl_ivec3.hpp"
+#endif
 
 namespace vgl
 {
@@ -85,7 +88,8 @@ public:
             {
                 unsigned idx = static_cast<unsigned>(ret);
                 const void* offset = reinterpret_cast<const void*>(m_offset);
-                attrib_array_enable(idx);
+                VGL_ASSERT(detail::OpenGlVertexArrayObjectState::g_opengl_vertex_array_object_state.getCurrentVao() != 0);
+                dnload_glEnableVertexAttribArray(idx);
                 dnload_glVertexAttribPointer(idx, m_element_count, m_type, m_normalized, stride, offset);
             }
             return ret;
@@ -112,7 +116,7 @@ public:
             return !(*this == op);
         }
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
         /// To string operator.
         ///
         /// \param op Input object.
@@ -277,6 +281,8 @@ public:
         m_index_data.push_back(op);
     }
 
+#if defined(VGL_ENABLE_VERTEX_NORMAL_PACKING)
+
     /// Write vertex data with semantic.
     ///
     /// \param channel Associated channel.
@@ -286,6 +292,8 @@ public:
         setChannel(channel, getVertexOffset());
         m_vertex_data.push(data);
     }
+
+#endif
 
     /// Write vertex data with semantic.
     ///
@@ -322,7 +330,7 @@ public:
     /// \param op Another data block.
     void append(const MeshData& op)
     {
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
         if((m_vertex_count + op.getVertexCount()) > 0xFFFFu)
         {
             VGL_THROW_RUNTIME_ERROR("trying to merge mesh data sets beyond 16 bit index scope");
@@ -344,10 +352,9 @@ public:
     /// \param op Program to bind with.
     void bindAttributes(const GlslProgram& op) const
     {
-#if defined(USE_LD) && defined(DEBUG)
-        bitset<detail::OpenGlAttribState::MAX_ATTRIB_ARRAYS> bound_attributes;
-#else
-        unsigned disable_attribs = 0;
+#if defined(VGL_USE_LD) && defined(DEBUG)
+        constexpr unsigned MAX_ATTRIB_ARRAYS = 8;
+        bitset<MAX_ATTRIB_ARRAYS> bound_attributes;
 #endif
 
         for(const auto& vv : m_channels)
@@ -355,34 +362,30 @@ public:
             int idx = vv.bind(op, m_stride);
             if(idx >= 0)
             {
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(VGL_USE_LD) && defined(DEBUG)
+                VGL_ASSERT(static_cast<unsigned>(idx) < MAX_ATTRIB_ARRAYS);
                 bound_attributes[idx] = true;
-#else
-                disable_attribs = max(disable_attribs, static_cast<unsigned>(idx) + 1);
 #endif
             }
         }
 
-#if defined(USE_LD) && defined(DEBUG)
-        unsigned disable_attribs = 0;
-        optional<unsigned> disabled_location;
-        for(unsigned ii = 0; (ii < detail::OpenGlAttribState::MAX_ATTRIB_ARRAYS); ++ii)
+#if defined(VGL_USE_LD) && defined(DEBUG)
+        bool disabled_found = false;
+        for(unsigned ii = 0; (ii < MAX_ATTRIB_ARRAYS); ++ii)
         {
             if(bound_attributes[ii])
             {
-                if(disabled_location)
+                if(disabled_found)
                 {
-                    VGL_THROW_RUNTIME_ERROR("attribute binding gap at " + to_string(*disabled_location));
+                    VGL_THROW_RUNTIME_ERROR("attribute binding gap before " + to_string(ii));
                 }
-                disable_attribs = ii + 1;
             }
             else
             {
-                disabled_location = ii;
+                disabled_found = true;
             }
         }
 #endif
-        attrib_array_disable_from(disable_attribs);
     }
 
     /// Update to GPU.
@@ -415,7 +418,7 @@ public:
 namespace detail
 {
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
 
 /// Increment data sizes by given mesh data size.
 ///

@@ -1,7 +1,9 @@
 #ifndef VGL_ARRAY_HPP
 #define VGL_ARRAY_HPP
 
-#if defined(USE_LD)
+#include "vgl_config.hpp"
+
+#if defined(VGL_USE_LD)
 #include "vgl_throw_exception.hpp"
 #endif
 
@@ -12,17 +14,18 @@ namespace vgl
 template<typename T, unsigned N> class array
 {
 public:
-    /// Convenience typedef.
+    /// Value type.
     using value_type = T;
-
     /// Iterator type.
-    using iterator = T*;
+    using iterator = value_type*;
     /// Const iterator type.
-    using const_iterator = const T*;
+    using const_iterator = const value_type*;
+    /// Type of this class.
+    using this_type = array<value_type, N>;
 
 public:
     /// Array data.
-    T m_data[N];
+    value_type m_data[N];
 
 private:
     /// Boundary check.
@@ -30,7 +33,7 @@ private:
     /// \param idx Index to check.
     constexpr void accessCheck(unsigned idx) const
     {
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(VGL_USE_LD) && defined(DEBUG)
         if(idx >= N)
         {
             VGL_THROW_RUNTIME_ERROR("accessing index " + to_string(idx) + " from array of size " + to_string(N));
@@ -44,7 +47,7 @@ private:
     /// \param idx Index to check.
     constexpr void accessCheck(int idx) const
     {
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(VGL_USE_LD) && defined(DEBUG)
         if(idx < 0)
         {
             VGL_THROW_RUNTIME_ERROR("accessing negative index " + to_string(idx) + " from array of size " +
@@ -62,17 +65,10 @@ public:
     {
         return m_data;
     }
-    /// Iterator to the beginning.
+    /// Const iterator to the beginning.
     ///
     /// \return Iterator.
     constexpr const_iterator begin() const noexcept
-    {
-        return m_data;
-    }
-    /// Iterator to the beginning.
-    ///
-    /// \return Iterator.
-    constexpr const_iterator cbegin() const noexcept
     {
         return m_data;
     }
@@ -84,17 +80,10 @@ public:
     {
         return m_data + N;
     }
-    /// Iterator to the end.
+    /// Const iterator to the end.
     ///
-    /// \return Iterator.
+    /// \return Const iterator.
     constexpr const_iterator end() const noexcept
-    {
-        return m_data + N;
-    }
-    /// Iterator to the end.
-    ///
-    /// \return Iterator.
-    constexpr const_iterator cend() const noexcept
     {
         return m_data + N;
     }
@@ -193,6 +182,9 @@ public:
         accessCheck(idx);
         return m_data[idx];
     }
+
+public:
+    VGL_ITERATOR_FUNCTIONS(this_type)
 };
 
 }

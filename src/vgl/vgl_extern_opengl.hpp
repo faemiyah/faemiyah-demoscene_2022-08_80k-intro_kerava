@@ -14,7 +14,8 @@
 #endif
 
 #if defined(VGL_USE_GLES)
-#include "GLES2/gl2.h"
+#define GL_GLEXT_PROTOTYPES
+#include "GLES3/gl3.h"
 #include "GLES2/gl2ext.h"
 #elif defined(VGL_ENABLE_GTK)
 #define GL_GLEXT_PROTOTYPES
@@ -42,6 +43,9 @@
 #endif
 #if !defined(dnload_glBindTexture)
 #define dnload_glBindTexture glBindTexture
+#endif
+#if !defined(dnload_glBindVertexArray)
+#define dnload_glBindVertexArray glBindVertexArray
 #endif
 #if !defined(dnload_glBlendFuncSeparate)
 #define dnload_glBlendFuncSeparate glBlendFuncSeparate
@@ -132,6 +136,9 @@
 #endif
 #if !defined(dnload_glGenTextures)
 #define dnload_glGenTextures glGenTextures
+#endif
+#if !defined(dnload_glGenVertexArrays)
+#define dnload_glGenVertexArrays glGenVertexArrays
 #endif
 #if !defined(dnload_glGetAttribLocation)
 #define dnload_glGetAttribLocation glGetAttribLocation

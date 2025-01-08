@@ -1,7 +1,7 @@
 #ifndef __g_shader_fragment_font_overlay_header__
 #define __g_shader_fragment_font_overlay_header__
 static const char *g_shader_fragment_font_overlay = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "font_overlay.frag.glsl"
 #else
 "uniform sampler2D m;"
@@ -23,14 +23,14 @@ static const char *g_shader_fragment_font_overlay = ""
 #endif
 #endif
 static const char* g_shader_fragment_font_overlay_uniform_glyph DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "glyph"
 #else
 "m"
 #endif
 "";
 static const char* g_shader_fragment_font_overlay_uniform_stipple DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "stipple"
 #else
 "u"

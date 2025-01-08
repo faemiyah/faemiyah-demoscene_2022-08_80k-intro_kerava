@@ -15,7 +15,7 @@ namespace detail
 {
 
 /// \cond
-void geometry_buffer_bind(const GeometryBuffer& geometry_buffer, const GlslProgram& prog);
+void geometry_buffer_bind(GeometryBuffer& geometry_buffer, const GlslProgram& prog);
 /// \endcond
 
 }
@@ -85,8 +85,8 @@ public:
                 reinterpret_cast<void*>(m_index_offset));
     }
 
+#if defined(VGL_USE_LD)
 public:
-#if defined(USE_LD)
     /// Stream output operator.
     ///
     /// \param lhs Left-hand-side operand.

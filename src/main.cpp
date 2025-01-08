@@ -886,7 +886,9 @@ static void* intro_state_draw(void*)
 /// \return nullptr
 static void* intro_state_generate(void* op)
 {
+#if defined(USE_LD)
     int64_t tstart = g_frame_counter.get_timespec_timestamp();
+#endif
     int frame_number = get_frame_number(op);
 
     // Need scope to wait on fences.
@@ -898,8 +900,10 @@ static void* intro_state_generate(void* op)
 
     // Dispatch swap task.
     vgl::TaskDispatcher::dispatch_main(intro_state_move, op);
+#if defined(USE_LD)
     int64_t tend = g_frame_counter.get_timespec_timestamp();
     g_frame_counter.setLastGenerationTime(tend - tstart);
+#endif
     return nullptr;
 }
 
