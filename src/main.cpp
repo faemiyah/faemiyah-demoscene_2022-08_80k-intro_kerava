@@ -1,6 +1,6 @@
 #include "dnload.h"
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 #include <atomic>
 #include "image_png.hpp"
 #include <boost/algorithm/string.hpp>
@@ -196,7 +196,7 @@ static void puts_ptr(void* op)
 #if defined(ENABLE_CHARTS) && ENABLE_CHARTS
 #include "vgl/vgl_spline.hpp"
 #endif
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 #include "vgl/vgl_csg_file.hpp"
 #endif
 
@@ -213,7 +213,7 @@ static int g_audio_position = INTRO_START_AUDIO;
 /// Global SDL window storage.
 SDL_Window *g_sdl_window;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 
 /// Next audio position for audio playback.
 static int g_next_audio_position = -1;
@@ -285,7 +285,7 @@ static int g_screen_h = SCREEN_H;
 // Frame time display ##################
 //######################################
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 
 /// Frame time container.
 class FrameTimeCounter
@@ -525,7 +525,7 @@ static int generate_audio_position(int op)
     return next_pos - remainder;
 }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 /// Guarder container type for frame number.
 class FrameNumber
 {
@@ -589,7 +589,7 @@ FrameNumber g_frame_number;
 /// \param op Frame number pointer.
 static int get_frame_number(void* op)
 {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     FrameNumber* num = static_cast<FrameNumber*>(op);
     return num->getFrameIdx();
 #else
@@ -601,7 +601,7 @@ static int get_frame_number(void* op)
 /// \param op Frame number pointer.
 static void* advance_frame_number(void* op)
 {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     FrameNumber* num = static_cast<FrameNumber*>(op);
     return num->advanceFrame();
 #else
@@ -614,7 +614,7 @@ static void* advance_frame_number(void* op)
 // Utility #############################
 //######################################
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 
 /// Human-readable fraction.
 ///
@@ -886,7 +886,7 @@ static void* intro_state_draw(void*)
 /// \return nullptr
 static void* intro_state_generate(void* op)
 {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     int64_t tstart = g_frame_counter.get_timespec_timestamp();
 #endif
     int frame_number = get_frame_number(op);
@@ -900,7 +900,7 @@ static void* intro_state_generate(void* op)
 
     // Dispatch swap task.
     vgl::TaskDispatcher::dispatch_main(intro_state_move, op);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     int64_t tend = g_frame_counter.get_timespec_timestamp();
     g_frame_counter.setLastGenerationTime(tend - tstart);
 #endif
@@ -938,7 +938,7 @@ static void* intro_state_move(void* op)
 /// \param len Number of bytes to write.
 static void audio_callback(void *userdata, Uint8 *stream, int len)
 {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     // Read audio position given in parallel by resuming playback.
     int next_pos = g_next_audio_position;
     if(next_pos != -1)
@@ -963,7 +963,7 @@ static SDL_AudioSpec audio_spec =
     AUDIO_SAMPLE_TYPE_SDL,
     AUDIO_CHANNELS,
     0,
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     4096,
 #else
     256, // ~172.3Hz, lower values seem to cause underruns
@@ -978,7 +978,7 @@ static SDL_AudioSpec audio_spec =
 // intro / _start ######################
 //######################################
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 /// Intro body function.
 ///
 /// \param flag_fullscreen Fullscreen toggle.
@@ -991,7 +991,7 @@ void _start()
 {
     dnload();
 
-#if !defined(USE_LD) && 0
+#if !defined(DNLOAD_USE_LD) && 0
     for(void** it = reinterpret_cast<void**>(&g_symbol_table); true; ++it)
     {
         if(reinterpret_cast<size_t>(it) >=
@@ -1016,7 +1016,7 @@ void _start()
     dnload_SDL_GL_CreateContext(g_sdl_window);
     dnload_SDL_ShowCursor(g_flag_developer);
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     {
         int swap_interval = flag_vsync ? -1 : 0;
         int err = SDL_GL_SetSwapInterval(swap_interval);
@@ -1034,7 +1034,7 @@ void _start()
     dnload_SDL_GL_SetSwapInterval(0);
 #endif
 
-#if defined(USE_LD) && !defined(DNLOAD_GLESV2)
+#if defined(DNLOAD_USE_LD) && !defined(DNLOAD_USE_GLES)
     {
         GLenum err = glewInit();
         if(GLEW_OK != err)
@@ -1046,7 +1046,7 @@ void _start()
     }
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     std::cout << "Vendor:      " + vgl::gl_vendor_string() + "\nVersion:     " + vgl::gl_version_string() <<
         "\nExtensions:  " << vgl::gl_extension_string(79, 13) << std::endl;
 #endif
@@ -1065,14 +1065,14 @@ void _start()
         }
     }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     std::cout << "Vertex data:   " << human_readable_memory(vgl::get_data_size_vertex()) <<  " in " <<
         vgl::get_num_geometry_buffers() << " buffers\nIndex data:    " <<
         human_readable_memory(vgl::get_data_size_index()) << "\nTexture data:  " <<
         human_readable_memory(vgl::get_data_size_texture()) << std::endl;
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     if(g_flag_record_audio || g_flag_record_video)
     {
         if(g_flag_record_audio)
@@ -1111,7 +1111,7 @@ void _start()
 #endif
 
     // Start draw loop.
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     g_time_delta = static_cast<int>(!g_flag_developer);
     vgl::TaskDispatcher::dispatch(intro_state_generate, &g_frame_number);
 #else
@@ -1120,7 +1120,7 @@ void _start()
 
     // Open audio device.
     dnload_SDL_OpenAudio(&audio_spec, NULL);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     if(!g_flag_developer)
 #endif
     {
@@ -1130,7 +1130,7 @@ void _start()
 
     for(;;)
     {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         static unsigned successful_frames = 0;
         static float move_speed = 2.0f / 50.0f;
         static uint8_t mouse_look = 0;
@@ -1148,7 +1148,7 @@ void _start()
 #endif
         SDL_Event event;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         while(SDL_PollEvent(&event))
         {
             if(SDL_QUIT == event.type)
@@ -1464,14 +1464,14 @@ void _start()
             int tick_diff = get_current_ticks() - prev_ticks;
             if(tick_diff >= (FRAME_MILLISECONDS * 3))
             {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 std::cout << "frameskip(" << successful_frames << "): " << (tick_diff - (FRAME_MILLISECONDS * 3)) <<
                     std::endl;
                 successful_frames = 0;
 #endif
                 frameskip = true;
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             else
             {
                 ++successful_frames;
@@ -1480,7 +1480,7 @@ void _start()
         }
 
         // Execute main loop tasks until draw command is reached.
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         int64_t tstart = g_frame_counter.get_timespec_timestamp();
 #endif
         for(;;)
@@ -1498,11 +1498,11 @@ void _start()
             if(!frameskip)
             {
                 task();
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 int64_t tmid = g_frame_counter.get_timespec_timestamp();
 #endif
                 swap_buffers();
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 int64_t tend = g_frame_counter.get_timespec_timestamp();
                 g_frame_counter.addFrame(tstart, tmid, tend);
 #endif
@@ -1531,7 +1531,7 @@ void _start()
         }
         prev_ticks += FRAME_MILLISECONDS;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         if((g_frame_number.getFrameIdx() > static_cast<int>(INTRO_LENGTH)) || quit)
         {
             break;
@@ -1546,7 +1546,7 @@ void _start()
 #endif
     }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     // Wait until next loop so the parallel tasks are done.
     for(;;)
     {
@@ -1560,7 +1560,7 @@ void _start()
 #endif
 
     teardown();
-#if !defined(USE_LD)
+#if !defined(DNLOAD_USE_LD)
     asm_exit();
 #endif
 }
@@ -1569,7 +1569,7 @@ void _start()
 // Main ################################
 //######################################
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 /// Main function.
 ///
 /// \param argc Argument count.

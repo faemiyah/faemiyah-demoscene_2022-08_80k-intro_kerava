@@ -24,7 +24,7 @@ else()
     check_mali()
 endif()
 if(MALI_FOUND)
-    add_definitions(-DDNLOAD_GLESV2)
+    add_definitions(-DDNLOAD_USE_GLES=30)
     set(EGL_LIBRARY "EGL")
     set(OPENGL_gl_LIBRARY "GLESv2")
 else()
@@ -34,8 +34,7 @@ endif()
 
 output_flags("DEBUG" on)
 
-add_definitions(-DUSE_LD)
-
+add_definitions(-DDNLOAD_USE_LD)
 add_definitions(-DVGL_DISABLE_CEIL -DVGL_DISABLE_DEPTH_TEXTURE -DVGL_DISABLE_EDGE -DVGL_DISABLE_OGG -DVGL_DISABLE_POLYGON_OFFSET -DVGL_DISABLE_STENCIL -DVGL_USE_BONE_STATE_FULL_TRANSFORM)
 
 include_directories("${PROJECT_SOURCE_DIR}/src")

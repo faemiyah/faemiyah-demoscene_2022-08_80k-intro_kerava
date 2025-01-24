@@ -106,7 +106,7 @@ public:
     //----------------------------------------------------------------------------
     void setMode(float value)
     {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         assert(value >= 0.0f && value <= 1.0f);
 #endif
         setMode(common::clrintf(value * static_cast<float>(eDelayModes::num_items - 1)));
@@ -115,7 +115,7 @@ public:
     //----------------------------------------------------------------------------
     void setMode(int value)
     {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         assert(value >= 0 && value < eDelayModes::num_items);
         if (value >= eDelayModes::num_items)
         {
@@ -146,7 +146,7 @@ public:
     //----------------------------------------------------------------------------
     void setSamplerate(float samplerate)
     {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         assert(samplerate > 0.0f);
 #endif
         m_samplerate = samplerate;
@@ -184,7 +184,7 @@ public:
             /* FALLTHRU */
 
         case eDelayModes::cross:
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(m_feedback >= 0.0f && m_feedback <= 1.0f);
 #endif
             for (ii = 0; ii < 2; ++ii)
@@ -205,7 +205,7 @@ public:
             break;
         }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         assert(m_mix >= 0.0f && m_mix <= 1.0f);
 #endif
         outputs[0] = ((1.0f - m_mix) * inputs[0]) + (m_mix * outputs[0]);

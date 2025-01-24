@@ -1,7 +1,7 @@
 #ifndef INTRO_STATE
 #define INTRO_STATE
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 /// Position saved from direction data.
 static vgl::vec3 g_direction_pos;
 /// Direction saved from direction data.
@@ -17,7 +17,7 @@ static int g_last_visual_debug = -1;
 /// Generate stipple settings.
 ///
 /// \return Stipple quad settings.
-#if !defined(USE_LD)
+#if !defined(DNLOAD_USE_LD)
 constexpr
 #endif
 vgl::vec4 get_stipple_settings()
@@ -577,7 +577,7 @@ public:
     {
         m_queue.draw();
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         vgl::error_check("draw()");
 #endif
     }
@@ -1076,7 +1076,7 @@ public:
             }
         }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         g_direction_pos = pos;
         g_direction_fw = fw;
         g_direction_up = up;
@@ -1113,7 +1113,7 @@ public:
         m_queue.pushDepth(GL_LESS, true);
         m_queue.pushClear(vgl::uvec4(255u, 255u, 255u, 0u), 1.0f);
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         // Set debug mode on or off for all programs.
         if(g_visual_debug != g_last_visual_debug)
         {
@@ -1132,7 +1132,7 @@ public:
         // Default projection matrix.
         const vgl::FrameBuffer& screen = vgl::FrameBuffer::get_default();
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         const vgl::Mesh* preview_mesh = g_data.getMeshByName(g_preview_mesh);
         if(preview_mesh)
         {
@@ -1266,7 +1266,7 @@ public:
 
             // Scene 4: sirkus hevo set.
         case 4:
-#if !defined(USE_LD)
+#if !defined(DNLOAD_USE_LD)
         default:
 #endif
             {
@@ -1279,7 +1279,7 @@ public:
             }
             break;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         default:
             break;
 #endif
@@ -1345,7 +1345,7 @@ public:
             }
         }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         if(g_last_frame_display)
         {
             const vgl::Font& font = g_data.getFont();

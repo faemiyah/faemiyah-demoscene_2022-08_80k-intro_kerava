@@ -18,7 +18,7 @@
 #include <memory>
 #endif
 
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(DNLOAD_USE_LD) && defined(DEBUG)
 #include <sstream>
 #include <stdexcept>
 #include <stdint.h>
@@ -79,10 +79,10 @@
 
 #if defined(WIN32)
 #define ops_roundf common::croundf
-#elif defined(USE_LD)
+#elif defined(DNLOAD_USE_LD)
 #define ops_roundf roundf
 #endif
-#if defined(WIN32) || defined(USE_LD)
+#if defined(WIN32) || defined(DNLOAD_USE_LD)
 #define ops_exp2f exp2f
 #define ops_powf powf
 #define ops_sqrtf sqrtf
@@ -103,7 +103,7 @@
 
 #if defined(ALTERNATIVE_FMODF)
 #define ops_fmodf common::mfmodf
-#elif defined(WIN32) || defined(USE_LD)
+#elif defined(WIN32) || defined(DNLOAD_USE_LD)
 #define ops_fmodf fmodf
 #else
 #define ops_fmodf dnload_fmodf
@@ -247,7 +247,7 @@ namespace common
 	{
 #if defined(WIN32)
 		return static_cast<int>(op + 0.5f);
-#elif defined(USE_LD)
+#elif defined(DNLOAD_USE_LD)
 		return static_cast<int>(lrintf(op));
 #else
 		return static_cast<int>(dnload_lrintf(op));
@@ -263,7 +263,7 @@ namespace common
 	{
 #if defined(WIN32)
 		return floorf(op + 0.5f);
-#elif defined(USE_LD)
+#elif defined(DNLOAD_USE_LD)
 		return roundf(op);
 #else
 		return static_cast<float>(dnload_lrintf(op));

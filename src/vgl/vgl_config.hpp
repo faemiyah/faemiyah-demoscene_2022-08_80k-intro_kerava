@@ -62,14 +62,14 @@
 ///
 ///   Compile assuming a real linker is in use. Should be enabled whenever not doing minified builds.
 
-#if defined(USE_LD) && USE_LD
+#if defined(DNLOAD_USE_LD) && DNLOAD_USE_LD
 /// Compile expecting a linker will be used.
 #define VGL_USE_LD
 #endif
 
-#if defined(DNLOAD_GLESV2) && DNLOAD_GLESV2
+#if defined(DNLOAD_USE_GLES) && DNLOAD_USE_GLES
 /// Use OpenGL ES as opposed to OpenGL.
-#define VGL_USE_GLES
+#define VGL_USE_GLES DNLOAD_USE_GLES
 #endif
 
 #if !defined(VGL_DISABLE_EDGE)

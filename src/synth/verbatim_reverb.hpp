@@ -376,7 +376,7 @@ class Reverb
                 - (0.6f * m_apfs[rvb_apf6]->getSampleDelayedBy(common::clrintf(RIGHT_TAP6_APF6 * M_SAMPLERATE)))
                 - (0.6f * m_delays[rvb_delay4]->getSampleDelayedBy(common::clrintf(RIGHT_TAP7_DELAY4 * M_SAMPLERATE)));
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(m_mix_wet >= 0.0f && m_mix_wet <= 1.0f);
 #endif
             outputs[0] = ((1.0f - m_mix_wet) * inputs[0]) + (m_mix_wet * left_out);

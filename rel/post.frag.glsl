@@ -1,4 +1,6 @@
+#if !defined(VGL_DISABLE_DEPTH_TEXTURE)
 #define VGL_DISABLE_DEPTH_TEXTURE
+#endif
 
 uniform sampler2D color;
 #if !defined(VGL_DISABLE_DEPTH_TEXTURE)
@@ -66,7 +68,7 @@ vec4 color_decode(float op)
 
 void main()
 {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     if(debug_mode != 0)
     {
         vec3 col = texture2D(color, tex).rgb;

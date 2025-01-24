@@ -101,7 +101,7 @@ void generate_audio(float *audio_buffer, unsigned buffer_length, vector<float> *
 #endif
     progress = 0.0f;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     std::cout << "Start audio generation.\n";
     std::cout << "Buffer length: " << buffer_length << "\n";
 #endif
@@ -113,7 +113,7 @@ void generate_audio(float *audio_buffer, unsigned buffer_length, vector<float> *
     int32_t l;
     int32_t events_left;
     int32_t total_events_left;
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     uint16_t idle_countdown = 0;
 #endif
 
@@ -192,7 +192,7 @@ void generate_audio(float *audio_buffer, unsigned buffer_length, vector<float> *
 
     event_index = 0;
     total_events_left = ((sizeof(g_song_data) / sizeof(*g_song_data)) / 5);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     std::cout << "Processing " << total_events_left << " events.\n";
 #endif
 
@@ -330,7 +330,7 @@ void generate_audio(float *audio_buffer, unsigned buffer_length, vector<float> *
 #ifdef HAS_ALL_NOTES_OFF_EVENTS
                 case synth_event_types::AllNotesOff:
                     // TODO: handle or filter events out altogether during generation
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                     std::cout << "End of events.\n";
                     idle_countdown = AUDIO_SAMPLERATE;
 #endif
@@ -354,7 +354,7 @@ void generate_audio(float *audio_buffer, unsigned buffer_length, vector<float> *
 #endif
 
                 default:
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                     printf("WARNING: undefined event: %d, %d, %d, %d, %d\n", g_song_data[k], eventnum, event_channel_num,
                         event_param_1, event_param_2);
 #endif
@@ -578,7 +578,7 @@ void generate_audio(float *audio_buffer, unsigned buffer_length, vector<float> *
         out[i * 2] = track_outs[LEFT_OUT_IDX]; //left channel;
         out[i * 2 + 1] = track_outs[RIGHT_OUT_IDX]; //right channel
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         if ((i % ((buffer_length / sizeof(float) / 2) / 100)) == 0)
         {
             unsigned blen = static_cast<unsigned>(buffer_length / sizeof(float) / 2);
@@ -602,7 +602,7 @@ void generate_audio(float *audio_buffer, unsigned buffer_length, vector<float> *
 
 #endif
     }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     std::cout << "End audio generation.\n";
 #endif
     progress = 1.0f;
