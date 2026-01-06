@@ -1004,7 +1004,7 @@ void _start()
 #endif
 
     dnload_SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
-#if defined(DNLOAD_GLESV2)
+#if defined(DNLOAD_USE_GLES)
     dnload_SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
     dnload_SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     dnload_SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
