@@ -10,9 +10,9 @@ using vgl::vector;
 
 /// Main entry point.
 ///
-/// To understand the significance of USE_LD and dnload(), see:
+/// To understand the significance of VGL_USE_LD and dnload(), see:
 /// http://faemiyah.fi/demoscene/dnload
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
 int main(int argc, char** argv)
 #else
 void _start()
@@ -54,7 +54,7 @@ void _start()
     }
     dnload_putchar('\n');
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
     (void)argc;
     (void)argv;
     return 0;

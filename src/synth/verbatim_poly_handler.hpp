@@ -255,7 +255,7 @@ class PolyHandler
                 // to that of one of the previous notes still being held.
                 if (m_num_active_notes > 0)
                 {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                     assert(m_newest_note_index < NUM_VOICES);
 #endif
                     if (note == m_notes[m_newest_note_index])

@@ -3,7 +3,7 @@
 
 #include "vgl_extern_opengl.hpp"
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
 #include "vgl_throw_exception.hpp"
 #endif
 
@@ -88,7 +88,7 @@ public:
     /// Destructor.
     ~Texture()
     {
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
         unbind();
 
         glDeleteTextures(1, &m_id);
@@ -155,7 +155,7 @@ protected:
         dnload_glTexParameteri(m_type, GL_TEXTURE_WRAP_S, mode);
         dnload_glTexParameteri(m_type, GL_TEXTURE_WRAP_T, mode);
 
-#if !defined(DNLOAD_GLESV2)
+#if !defined(VGL_USE_GLES)
         /// Set 3rd axis as well if necessary.
         if((m_type == GL_TEXTURE_3D) || (m_type == GL_TEXTURE_CUBE_MAP))
         {
@@ -185,7 +185,7 @@ protected:
         {
             texture->bind(g_active_texture_unit);
         }
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
         else
         {
             unbind();
@@ -193,7 +193,7 @@ protected:
 #endif
     }
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
     /// Unbind texture from whichever texture unit it's bound to.
     void unbind() const
     {
@@ -219,7 +219,7 @@ public:
     /// \param op Unit to bind to.
     void bind(unsigned op) const
     {
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
         if(op >= MAX_TEXTURE_UNITS)
         {
             VGL_THROW_RUNTIME_ERROR("trying to bind to texture unit index " + to_string(op) + " of maximum " +
@@ -267,7 +267,7 @@ private:
 
 }
 
-#if !defined(USE_LD)
+#if !defined(VGL_USE_LD)
 #include "vgl_texture.cpp"
 #endif
 

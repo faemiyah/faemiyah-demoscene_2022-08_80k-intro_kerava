@@ -58,7 +58,7 @@ class Delay
         //----------------------------------------------------------------------------
         void setFeedback(float feedback)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(feedback >= 0.0f && feedback <= 1.0f);
 #endif
             m_feedback = feedback;
@@ -67,7 +67,7 @@ class Delay
         //----------------------------------------------------------------------------
         void setDelayTime(float delay_time)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(delay_time >= 0.0f && delay_time <= 1.0f);
             if (delay_time < 0.0f || delay_time > 1.0f)
             {
@@ -91,7 +91,7 @@ class Delay
         //----------------------------------------------------------------------------
         float getSampleAt(int index)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(index >= 0 && index < g_delay_buffer_size);
 #endif
             return m_delay_buffer[index % m_delay_time];
@@ -110,7 +110,7 @@ class Delay
                 }
             }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(index >= 0 && index < g_delay_buffer_size);
 #endif
             return m_delay_buffer[index];
@@ -130,7 +130,7 @@ class Delay
         //----------------------------------------------------------------------------
         void write(float in)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(m_delay_index >= 0 && m_delay_index < g_delay_buffer_size);
             if (m_delay_index < 0 || m_delay_index > g_delay_buffer_size)
             {
@@ -151,7 +151,7 @@ class Delay
         //----------------------------------------------------------------------------
         float read()
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             if (m_delay_index < 0 || m_delay_index > g_delay_buffer_size)
             {
                 std::ostringstream sstr;
@@ -215,7 +215,7 @@ class AllPass
         //----------------------------------------------------------------------------
         void setFeedback(float feedback)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(feedback >= 0.0f && feedback <= 1.0f);
 #endif
             m_feedback = common::cclampf(feedback, 0.0f, 1.0f);

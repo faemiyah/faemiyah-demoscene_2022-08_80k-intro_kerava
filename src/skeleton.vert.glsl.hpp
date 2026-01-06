@@ -1,26 +1,26 @@
 #ifndef __g_shader_vertex_skeleton_header__
 #define __g_shader_vertex_skeleton_header__
 static const char *g_shader_vertex_skeleton = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "skeleton.vert.glsl"
 #else
-"attribute vec3 H;"
-"attribute vec3 t;"
-"attribute vec4 A;"
-"attribute vec4 E;"
-"uniform mat4 P;"
-"uniform mat4 Y;"
-"uniform mat3 Q;"
-"uniform mat4 L[64];"
-"uniform vec3 T;"
-"varying vec3 D;"
-"varying vec3 f;"
+"attribute vec3 r;"
+"attribute vec3 o;"
+"attribute vec4 t;"
+"attribute vec4 g;"
+"uniform mat4 f;"
+"uniform mat4 l;"
+"uniform mat3 m;"
+"uniform mat4 v[64];"
+"uniform vec3 u;"
+"varying vec3 e;"
+"varying vec3 a;"
 "void main()"
 "{"
-"ivec4 C=ivec4(E);"
-"mat4 x=L[C.s]*A.s+L[C.t]*A.t+L[C.p]*A.p;"
-"vec3 A=(x*vec4(H,1)).stp,H=mat3(x)*t;"
-"D=Q*H,f=T-(Y*vec4(A,1)).stp,gl_Position=P*vec4(A,1);"
+"ivec4 i=ivec4(g);"
+"mat4 c=v[i.r]*t.r+v[i.g]*t.g+v[i.b]*t.b;"
+"vec3 v=(c*vec4(r,1)).rgb,r=mat3(c)*o;"
+"e=m*r,a=u-(l*vec4(v,1)).rgb,gl_Position=f*vec4(v,1);"
 "}"
 #endif
 "";
@@ -32,66 +32,66 @@ static const char *g_shader_vertex_skeleton = ""
 #endif
 #endif
 static const char* g_shader_vertex_skeleton_attribute_position DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "position"
 #else
-"H"
+"r"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_attribute_normal DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "normal"
+#else
+"o"
+#endif
+"";
+static const char* g_shader_vertex_skeleton_attribute_bone_weight DNLOAD_RENAME_UNUSED = ""
+#if defined(DNLOAD_USE_LD)
+"bone_weight"
 #else
 "t"
 #endif
 "";
-static const char* g_shader_vertex_skeleton_attribute_bone_weight DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
-"bone_weight"
-#else
-"A"
-#endif
-"";
 static const char* g_shader_vertex_skeleton_attribute_bone_ref DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "bone_ref"
 #else
-"E"
+"g"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_combined_transform DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "combined_transform"
 #else
-"P"
+"f"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_modelview_transform DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "modelview_transform"
 #else
-"Y"
+"l"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_normal_transform DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "normal_transform"
 #else
-"Q"
+"m"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_skeleton DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "skeleton"
 #else
-"L"
+"v"
 #endif
 "";
 static const char* g_shader_vertex_skeleton_uniform_camera_position DNLOAD_RENAME_UNUSED = ""
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 "camera_position"
 #else
-"T"
+"u"
 #endif
 "";
 #endif

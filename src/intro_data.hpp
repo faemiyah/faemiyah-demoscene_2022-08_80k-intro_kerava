@@ -4,7 +4,7 @@
 #include "audio_samples.hpp"
 #include "intro_world.hpp"
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 #include "FLAC/stream_decoder.h"
 #endif
 
@@ -12,7 +12,7 @@
 #include "synth/verbatim_synth.hpp"
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 
 /// Update a CSG header file with data.
 ///
@@ -134,7 +134,7 @@ public:
 class IntroData
 {
 private:
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     /// FLAC write status.
     struct FlacWriteStatus
     {
@@ -371,7 +371,7 @@ private:
     /// 4: Sirkus hevo set.
     vgl::array<IntroWorld, 5> m_world;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     /// Meshes for preview.
     vgl::vector<vgl::Mesh*> m_preview_meshes;
 #endif
@@ -514,7 +514,7 @@ private:
         initializeLevelData();
     }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     /// Initialize audio (load).
     void initializeAudioLoad()
     {
@@ -599,7 +599,7 @@ private:
                     g_shader_vertex_font_uniform_glyph_position);
             m_program_font.addUniform(vgl::UniformSemantic::GLYPH_QUAD,
                     g_shader_vertex_font_uniform_glyph_quad);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             m_program_font.addUniform("debug_mode");
 #endif
 
@@ -634,7 +634,7 @@ private:
                     g_shader_vertex_offscreen_uniform_combined_transform);
             m_program_offscreen.addUniform(vgl::UniformSemantic::PROJECTION_RANGE,
                     g_shader_fragment_offscreen_uniform_projection_range);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             m_program_offscreen.addUniform("debug_mode");
 #endif
 
@@ -657,7 +657,7 @@ private:
                     g_shader_vertex_skeleton_uniform_skeleton);
             m_program_skeleton.addUniform(vgl::UniformSemantic::PROJECTION_RANGE,
                     g_shader_fragment_skeleton_uniform_projection_range);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             m_program_skeleton.addUniform("debug_mode");
 #endif
 
@@ -668,7 +668,7 @@ private:
             m_program_visualization.addUniform(vgl::UniformSemantic::PROJECTION_CAMERA_MODELVIEW_MATRIX,
                     g_shader_vertex_visualization_uniform_combined_transform);
             m_program_visualization.addUniform(g_shader_fragment_visualization_uniform_color);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             m_program_visualization.addUniform("debug_mode");
 #endif
 
@@ -683,7 +683,7 @@ private:
             m_program_post.addUniform(g_shader_fragment_post_uniform_depth);
 #endif
             m_program_post.addUniform(g_shader_fragment_post_uniform_stipple);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             m_program_post.addUniform("debug_mode");
 #endif
         }
@@ -729,7 +729,7 @@ private:
             static const char *g_font_options[] =
             {
                 "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", // (Hardkernel Ubuntu)
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 "/usr/local/share/fonts/dejavu/DejaVuSans-Bold.ttf", // (FreeBSD)
                 "DejaVuSans-Bold.ttf", // (local copy found by lookup)
 #endif
@@ -764,7 +764,7 @@ private:
             };
             vgl::LogicalMesh lmesh(data);
             m_mesh_quad = lmesh.compile();
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("quad", *m_mesh_quad);
 #endif
         }
@@ -817,7 +817,7 @@ private:
             m_mesh_glyph[5] = generate_glyph_mesh(70, 80, 70, 80);
             m_mesh_glyph[6] = generate_glyph_mesh(80, 90, 80, 90);
             m_mesh_glyph[7] = generate_glyph_mesh(90, 100, 90, 100);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("glyph0", *m_mesh_glyph[0]);
             addPreviewMesh("glyph1", *m_mesh_glyph[1]);
             addPreviewMesh("glyph2", *m_mesh_glyph[2]);
@@ -880,7 +880,7 @@ private:
             vgl::LogicalMesh lmesh(data.data());
             m_mesh_visualization[0] = lmesh.compile(false);
             m_mesh_visualization[1] = lmesh.compile(false);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("visualization0", *m_mesh_visualization[0]);
             addPreviewMesh("visualization1", *m_mesh_visualization[1]);
 #endif
@@ -912,7 +912,7 @@ private:
                     if(it < (input_count - 2))
                     {
                         tdiff = static_cast<int16_t>(input_data[it + 3] - py);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                         if(tdiff <= 0)
                         {
                             VGL_THROW_RUNTIME_ERROR("chart spline not monotonically increasing");
@@ -989,7 +989,7 @@ private:
                     970, 1000,
                 };
                 m_mesh_chart[0] = generate_chart(CHART_DATA, static_cast<unsigned>(sizeof(CHART_DATA) / sizeof(int16_t)));
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("chart0", *m_mesh_chart[0]);
 #endif
             }
@@ -1007,7 +1007,7 @@ private:
                     720, 1000,
                 };
                 m_mesh_chart[1] = generate_chart(CHART_DATA, static_cast<unsigned>(sizeof(CHART_DATA) / sizeof(int16_t)));
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("chart1", *m_mesh_chart[1]);
 #endif
             }
@@ -1022,7 +1022,7 @@ private:
                     670, 1000,
                 };
                 m_mesh_chart[2] = generate_chart(CHART_DATA, static_cast<unsigned>(sizeof(CHART_DATA) / sizeof(int16_t)));
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("chart2", *m_mesh_chart[2]);
 #endif
             }
@@ -1037,7 +1037,7 @@ private:
                     680, 1000,
                 };
                 m_mesh_chart[3] = generate_chart(CHART_DATA, static_cast<unsigned>(sizeof(CHART_DATA) / sizeof(int16_t)));
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("chart3", *m_mesh_chart[3]);
 #endif
             }
@@ -1053,7 +1053,7 @@ private:
                     695, 1000,
                 };
                 m_mesh_chart[4] = generate_chart(CHART_DATA, static_cast<unsigned>(sizeof(CHART_DATA) / sizeof(int16_t)));
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("chart4", *m_mesh_chart[4]);
 #endif
             }
@@ -1069,7 +1069,7 @@ private:
                     700, 1000,
                 };
                 m_mesh_chart[5] = generate_chart(CHART_DATA, static_cast<unsigned>(sizeof(CHART_DATA) / sizeof(int16_t)));
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("chart5", *m_mesh_chart[5]);
 #endif
             }
@@ -1081,7 +1081,7 @@ private:
             const int16_t FENCE_LENGTH = 500;
             const int16_t FENCE_HEIGHT_2 = 210;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t FENCE_HEIGHT_1 = 230;
 
             vgl::vector<int16_t> data;
@@ -1147,7 +1147,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_fence = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("fence", *m_mesh_fence);
 #endif
         }
@@ -1220,7 +1220,7 @@ private:
             const int16_t TENDON_RADIUS = 4;
             const int16_t ZIGZAG_COUNT = 6;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t PYLON_WIDTH_BASE = 98;
             const int16_t PYLON_HEIGHT_LINE_START = 550;
             const int16_t PYLON_HORIZONTAL_EXCESS = 520;
@@ -1259,11 +1259,11 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_pylon_extra_base = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("pylon_extra_base", *m_mesh_pylon_extra_base);
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             // Continue work on pylon.
             data.resize(11);
 
@@ -1399,7 +1399,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_pylon = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("pylon", *m_mesh_pylon);
 #endif
 
@@ -1407,7 +1407,7 @@ private:
             const int16_t ARC_HEIGHT_GRIDER = 800;
             const int16_t ARC_GRIDER_SEPARATION = 40;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t ARC_BASE_WIDTH = 112;
             const int16_t ARC_VERTICAL_STRUT = static_cast<int16_t>(static_cast<int>(PYLON_X * 100.0f) - PYLON_HORIZONTAL_OFFSET);
             const int16_t ARC_HORIZONTAL_DIRECTOR_START = static_cast<int16_t>(ARC_VERTICAL_STRUT + 292);
@@ -1887,7 +1887,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_arc = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("arc", *m_mesh_arc);
 #endif
 
@@ -1895,7 +1895,7 @@ private:
             const int16_t TENDON_LENGTH = 5500;
             const int16_t TENDON_SUPPORT_COUNT = 6;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             data.clear();
 
             // Main lines.
@@ -1977,7 +1977,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_tendons = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("tendons", *m_mesh_tendons);
 #endif
         }
@@ -2059,7 +2059,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_lamppost = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("lamppost", *m_mesh_lamppost);
 #endif
         }
@@ -2083,7 +2083,7 @@ private:
             const int16_t FENCE_POST_SMALL_RADIUS = 5;
             const int16_t FENCE_OFFSET = static_cast<int16_t>(BRIDGE_SIDE_WIDTH + (BRIDGE_BASE_WIDTH / 2) - (FENCE_POST_LARGE_WIDTH / 2));
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t BRIDGE_BASE_THICKNESS = 140;
 
             vgl::vector<int16_t> data;
@@ -2216,7 +2216,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_bridge = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("bridge", *m_mesh_bridge);
 #endif
         }
@@ -2305,14 +2305,14 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_rails = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("rails", *m_mesh_rails);
 #endif
         }
 
         // Signs.
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t SIGN_HEIGHT = 220;
             const int16_t SIGN_WIDTH = 570;
             const int16_t SIGN_DEPTH = 6;
@@ -2371,11 +2371,11 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sign[0] = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sign0", *m_mesh_sign[0]);
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             data.resize(11);
 
             // Legs.
@@ -2414,14 +2414,14 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sign[1] = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sign1", *m_mesh_sign[1]);
 #endif
         }
 
         // Mega-kerava sign.
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t SIGN_HEIGHT = 340;
             const int16_t SIGN_WIDTH = 1240;
             const int16_t SIGN_DEPTH = 15;
@@ -2480,7 +2480,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sign[2] = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sign2", *m_mesh_sign[2]);
 #endif
         }
@@ -2489,7 +2489,7 @@ private:
         // Roughly half the size of the actual landmark.
         // Relative dimensions have been slightly exaggerated for effect.
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t CAN_RADIUS1 = 170;
             const int16_t CAN_RADIUS2 = 156;
             const int16_t CAN_RADIUS3 = 166;
@@ -2630,7 +2630,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sign[3] = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sign3", *m_mesh_sign[3]);
 #endif
         }
@@ -2815,7 +2815,7 @@ private:
                     vgl::LogicalMesh lmesh(data.data());
                     m_mesh_building[ii] = lmesh.compile();
                 }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh(("building" + vgl::to_string(ii)).c_str(), *m_mesh_building[ii]);
 #endif
             }
@@ -2823,7 +2823,7 @@ private:
 
         // Kerava State Building.
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t KBS_MID_HEIGHT1 = 5600;
             const int16_t KBS_MID_HEIGHT2 = 6700;
             const int16_t KBS_MID_WIDTH1 = 1800;
@@ -2960,7 +2960,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_kerava_state_building = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("kerava_state_building", *m_mesh_kerava_state_building);
 #endif
         }
@@ -3225,7 +3225,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_burj_kerava = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("burj_kerava", *m_mesh_burj_kerava);
 #endif
         }
@@ -3242,7 +3242,7 @@ private:
             const int16_t JKS_WIDTH2 = 1600;
             const int16_t JKS_DEPTH2 = 2800;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t JKS_HEIGHT2 = 6900;
 
             vgl::vector<int16_t> data;
@@ -3419,14 +3419,14 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_john_kerava_center = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("john_kerava_center", *m_mesh_john_kerava_center);
 #endif
         }
 
         // Keravanas towers.
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t BRIDGE_X1 = 1200;
             const int16_t BRIDGE_X2 = -1200;
             const int16_t BRIDGE_Y = 3000;
@@ -3655,7 +3655,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_keravanas_towers = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("keravanas_towers", *m_mesh_keravanas_towers);
 #endif
         }
@@ -3714,7 +3714,7 @@ private:
             m_animation_ukko[6] = vgl::Animation::create(g_animation_ukko_0_trash,
                     g_bones_ukko_size, g_animation_ukko_0_trash_size,
                     FIGURE_SCALE);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("ukko", *m_mesh_ukko);
 #endif
         }
@@ -3786,7 +3786,7 @@ private:
             const int16_t SM5_DOOR_PIPE_YMID = 145;
             const int16_t SM5_PIPE_RADIUS = 5;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t SM5_STAIR_BLOCK_HEIGHT = 64;
             const int16_t SM5_STAIR_HEIGHT = 16;
             const int16_t SM5_STAIR_WIDTH = 60;
@@ -4457,14 +4457,14 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sm5_interior = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sm5_interior", *m_mesh_sm5_interior);
 #endif
         }
 
         // Sm5 chair.
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t SM5_CHAIR_SITZ_HEIGHT = 50;
             const int16_t SM5_CHAIR_SITZ_THICKNESS = 10;
             const int16_t SM5_CHAIR_SITZ_SIZE = 47;
@@ -4542,11 +4542,11 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sm5_chair[1] = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sm5_chair", *m_mesh_sm5_chair[1]);
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             // Add left handedness.
             data.pop_back();
 
@@ -4574,11 +4574,11 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sm5_chair[0] = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sm5_chair_l", *m_mesh_sm5_chair[0]);
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             // Mirror handhold.
             data[data.size() - 8] = static_cast<int16_t>(SM5_CHAIR_SITZ_SIZE / 2);
             data[data.size() - 11] = static_cast<int16_t>(SM5_CHAIR_SITZ_SIZE / 2);
@@ -4592,7 +4592,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_sm5_chair[2] = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sm5_chair_r", *m_mesh_sm5_chair[2]);
 #endif
         }
@@ -4604,7 +4604,7 @@ private:
             const int16_t TRAIN_LENGTH = 1900;
             const int16_t TRAIN_WIDTH = 302;
             const int16_t TRAIN_HEIGHT = 426;
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t TRAIN_BOTTOM_HEIGHT = 110;
 #endif
 
@@ -4870,7 +4870,7 @@ private:
                 const int16_t TRAIN_FRONT = static_cast<int16_t>(TRAIN_LENGTH / 2 - TRAIN_FRONT_TRAPEZOID_LENGTH);
                 const int16_t TRAIN_BACK = static_cast<int16_t>(-TRAIN_LENGTH / 2 + TRAIN_BACK_TRAPEZOID_LENGTH);
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 const int16_t TRAIN_BOTTOM_TRAPEZOID_HEIGHT = 50;
 
                 vgl::vector<int16_t> data;
@@ -5414,7 +5414,7 @@ private:
                     vgl::LogicalMesh lmesh(data.data());
                     m_mesh_train[0] = lmesh.compile();
                 }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("train0", *m_mesh_train[0]);
 #endif
             }
@@ -5426,7 +5426,7 @@ private:
                 const int16_t TRAIN_FRONT = static_cast<int16_t>(TRAIN_LENGTH / 2 - TRAIN_TRAPEZOID_LENGTH);
                 const int16_t TRAIN_BACK = static_cast<int16_t>(-TRAIN_LENGTH / 2 + TRAIN_TRAPEZOID_LENGTH);
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 const int16_t TRAIN_BOTTOM_TRAPEZOID_HEIGHT = 70;
                 const int16_t TRAIN_ROOF_TRAPEZOID_HEIGHT = 80;
                 const int16_t TRAIN_ROOF_HEIGHT = static_cast<int16_t>(TRAIN_HEIGHT - TRAIN_ROOF_TRAPEZOID_HEIGHT);
@@ -5826,7 +5826,7 @@ private:
                     vgl::LogicalMesh lmesh(data.data());
                     m_mesh_train[1] = lmesh.compile();
                 }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("train1", *m_mesh_train[1]);
 #endif
             }
@@ -5956,7 +5956,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_katos = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("katos", *m_mesh_katos);
 #endif
         }
@@ -6073,7 +6073,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_tower = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("tower", *m_mesh_tower);
 #endif
         }
@@ -6096,7 +6096,7 @@ private:
             const int16_t RAMP_XL = static_cast<int16_t>(-RAMP_WIDTH + RAMP_SIDE_THICKNESS / 2);
             const int16_t RAMP_XR = static_cast<int16_t>(RAMP_WIDTH - RAMP_SIDE_THICKNESS / 2);
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t RAMP_STOP_EXTENT = 17;
             const int16_t RAMP_STOP_MID_EXTENT = 10;
             const int16_t RAMP_SIDE_THICKNESS_EXTENT = 8;
@@ -6307,7 +6307,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_ramp = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("ramp", *m_mesh_ramp);
 #endif
         }
@@ -6345,7 +6345,7 @@ private:
 
             const int16_t MAIN_DOOR_LENGTH = 1220;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t STATION_HEIGHT1 = 580;
             const int16_t STATION_HEIGHT4 = 860;
 
@@ -6832,7 +6832,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_kerava_station = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("kerava_station", *m_mesh_kerava_station);
 #endif
         }
@@ -6937,7 +6937,7 @@ private:
             const int16_t BUILDING_L = 800;
             const int16_t BUILDING_INSET_D = 260;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             const int16_t BUILDING_W = 600;
             const int16_t BUILDING_H1 = 300;
             const int16_t BUILDING_H2 = 320;
@@ -7170,7 +7170,7 @@ private:
                 vgl::LogicalMesh lmesh(data.data());
                 m_mesh_station_building = lmesh.compile();
             }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("station_building", *m_mesh_station_building);
 #endif
         }
@@ -7184,13 +7184,13 @@ private:
                     g_vertices_g_sirkus_hevo_nen_size, g_indices_g_sirkus_hevo_nen_size,
                     SIRKUS_HEVO_NEN_SCALE);
             m_mesh_sirkus_hevo_nen = lmesh.compile();
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             addPreviewMesh("sirkus_hevo_nen", *m_mesh_sirkus_hevo_nen);
 #endif
         }
 
         // Construct world 0 (first-person train carriage).
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         if(g_preview_mesh.empty() || g_preview_mesh.starts_with("world"))
 #endif
         {
@@ -7291,7 +7291,7 @@ private:
         };
 
         // Construct world 1 (first-person track) and world 2 (signs, same space as first-person track).
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         if(g_preview_mesh.empty() || g_preview_mesh.starts_with("terrain") || g_preview_mesh.starts_with("world"))
 #endif
         {
@@ -7310,7 +7310,7 @@ private:
             // Set the terrain seed.
             {
                 unsigned terrain_seed = 1096;
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 if(g_seed)
                 {
                     terrain_seed = *g_seed;
@@ -7404,7 +7404,7 @@ private:
                 }
 
                 m_mesh_terrain[kk] = lmesh.compile(false);
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh(("terrain" + vgl::to_string(kk)).c_str(), *m_mesh_terrain[kk]);
 #endif
             }
@@ -7701,7 +7701,7 @@ private:
         }
 
         // World 3 (Kerava station).
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         if(g_preview_mesh.empty() || g_preview_mesh.starts_with("terrain") || g_preview_mesh.starts_with("world"))
 #endif
         {
@@ -7796,7 +7796,7 @@ private:
                     }
                     m_mesh_terrain_kerava = lmesh.compile();
                 }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("terrain_kerava", *m_mesh_terrain_kerava);
 #endif
             }
@@ -7873,7 +7873,7 @@ private:
         }
 
         // World 4 (Sirkus hevo set).
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         if(g_preview_mesh.empty() || g_preview_mesh.starts_with("terrain") || g_preview_mesh.starts_with("world"))
 #endif
         {
@@ -7944,7 +7944,7 @@ private:
                     vgl::LogicalMesh lmesh(data.data());
                     m_mesh_terrain_sirkus_hevo_set = lmesh.compile();
                 }
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
                 addPreviewMesh("terrain_sirkus_hevo_set", *m_mesh_terrain_sirkus_hevo_set);
 #endif
             }
@@ -8358,7 +8358,7 @@ public:
             vgl::TaskDispatcher::wait_main(task_graphics_immediate, this);
         }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         // If developer mode is on, load audio instead of generating it.
         if (g_flag_developer)
         {
@@ -8376,7 +8376,7 @@ public:
         vgl::TaskDispatcher::dispatch_main(task_ready, this);
     }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     /// Add a preview mesh.
     ///
     /// \param name Name of the mesh.
@@ -8445,7 +8445,7 @@ private:
         return nullptr;
     }
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     /// Function for generating audio.
     ///
     /// \param op Intro data passed as pointer.

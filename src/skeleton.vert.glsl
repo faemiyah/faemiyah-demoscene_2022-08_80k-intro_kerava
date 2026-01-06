@@ -17,7 +17,7 @@ void main()
     ivec4 iref = ivec4(bone_ref);
     mat4 bone_transform = skeleton[iref.x] * bone_weight.x + skeleton[iref.y] * bone_weight.y + skeleton[iref.z] * bone_weight.z;
     vec3 lpos = (bone_transform * vec4(position, 1.0)).xyz;
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     vec4 col0 = bone_transform[0];
     vec4 col1 = bone_transform[1];
     vec4 col2 = bone_transform[2];

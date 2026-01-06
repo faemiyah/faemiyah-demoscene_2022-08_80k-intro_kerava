@@ -108,7 +108,7 @@ class Chorus
         //----------------------------------------------------------------------------
         void setDelay(float value)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(value >= 0.0f && value <= 1.0f);
 #endif
             m_delay = value;
@@ -118,7 +118,7 @@ class Chorus
         //----------------------------------------------------------------------------
         void setDepth(float depth)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(depth >= 0.0f && depth <= 1.0f);
 #endif
             m_depth = depth;
@@ -128,7 +128,7 @@ class Chorus
         //----------------------------------------------------------------------------
         void setDelayRange()
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(m_delay >= 0.0f && m_delay <= 1.0f);
             assert(m_depth >= 0.0f && m_depth <= 1.0f);
 #endif
@@ -166,7 +166,7 @@ class Chorus
         void process(float *inputs, float *outputs)
         {
             float center_delay_time_sec = (m_max_delay_time_sec + m_min_delay_time_sec) * 0.5f;
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(center_delay_time_sec >= 0.0f);
 #endif
 
@@ -176,7 +176,7 @@ class Chorus
             int sample_offset = common::clrintf(M_SAMPLERATE * (center_delay_time_sec + (osc_val * m_depth * center_delay_time_sec)));
 #endif
             float dry[2];
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(m_mix >= 0.0f && m_mix <= 1.0f);
 #endif
             for (int ii = 0; ii < 2; ++ii)

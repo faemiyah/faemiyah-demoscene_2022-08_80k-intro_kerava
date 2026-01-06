@@ -510,7 +510,7 @@ class Oscillator
         //----------------------------------------------------------------------------
         void setPitchBend(float value)
         {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
             assert(value > 0.0f);
 #endif
             m_pitchbend_mult = value;

@@ -42,12 +42,12 @@
 #include <math.h>
 #endif
 
-#if defined(DNLOAD_VIDEOCORE)
+#if defined(DNLOAD_USE_VIDEOCORE)
 #include "bcm_host.h"
 #include "EGL/egl.h"
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 #if defined(WIN32)
 #include "windows.h"
 #include "GL/glew.h"
@@ -56,7 +56,7 @@
 #include "GL/glew.h"
 #include <OpenGL/glu.h>
 #else
-#if defined(DNLOAD_GLESV2)
+#if defined(DNLOAD_USE_GLES)
 #include "GLES2/gl2.h"
 #include "GLES2/gl2ext.h"
 #else
@@ -70,7 +70,7 @@
 #include <OpenGL/glext.h>
 #include <OpenGL/glu.h>
 #else
-#if defined(DNLOAD_GLESV2)
+#if defined(DNLOAD_USE_GLES)
 #include "GLES2/gl2.h"
 #include "GLES2/gl2ext.h"
 #else
@@ -83,7 +83,7 @@
 
 #include "opus.h"
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 #include "gnu_rand.h"
 #else
 #define DNLOAD_RAND_IMPLEMENTATION_BSD 0
@@ -119,7 +119,7 @@
 /// Macro stringification.
 #define DNLOAD_MACRO_STR(op) DNLOAD_MACRO_STR_HELPER(op)
 
-#if defined(DNLOAD_GLESV2)
+#if defined(DNLOAD_USE_GLES)
 /// Apientry definition (OpenGL ES 2.0).
 #define DNLOAD_APIENTRY GL_APIENTRY
 #else
@@ -135,7 +135,7 @@
 #define DNLOAD_POINTER_SIZE 4
 #endif
 
-#if !defined(USE_LD)
+#if !defined(DNLOAD_USE_LD)
 /// Error string for when assembler exit procedure is not available.
 #define DNLOAD_ASM_EXIT_ERROR "no assembler exit procedure defined for current operating system or architecture"
 /// Perform exit syscall in assembler.
@@ -194,7 +194,7 @@ static void asm_exit(void)
 }
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 /// \cond
 #define dnload_glGenerateMipmap glGenerateMipmap
 #define dnload_SDL_CondSignal SDL_CondSignal
@@ -640,7 +640,7 @@ static struct SymbolTableStruct
 };
 #endif
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 /// \cond
 #define dnload()
 /// \endcond
@@ -863,7 +863,7 @@ static void dnload(void)
 #define DNLOAD_VISIBILITY __attribute__((externally_visible,visibility("default")))
 #endif
 
-#if !defined(USE_LD)
+#if !defined(DNLOAD_USE_LD)
 #if defined(__cplusplus)
 extern "C"
 {

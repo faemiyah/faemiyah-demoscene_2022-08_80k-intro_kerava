@@ -225,7 +225,7 @@ public:
     //----------------------------------------------------------------------------
     void setMode(float value)
     {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         assert(value >= 0.0f && value <= 1.0f);
 #endif
         setMode(common::clrintf(value * static_cast<float>(eDistortionModes::num_items - 1)));
@@ -234,7 +234,7 @@ public:
     //----------------------------------------------------------------------------
     void setMode(int value)
     {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         assert(value >= 0 && value < eDistortionModes::num_items);
         if (value >= eDistortionModes::num_items)
         {
@@ -252,7 +252,7 @@ public:
     //----------------------------------------------------------------------------
     void setSamplerate(float samplerate)
     {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
         assert(samplerate > 0.0f);
 #endif
         m_samplerate = samplerate;

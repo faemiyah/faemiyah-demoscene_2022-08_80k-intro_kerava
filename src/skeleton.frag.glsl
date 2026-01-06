@@ -7,7 +7,7 @@ void main()
 {
     vec3 snorm = normalize(nor);
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     if(debug_mode != 0)
     {
         gl_FragColor = vec4(0.5 + 0.5 * snorm, 1.0);

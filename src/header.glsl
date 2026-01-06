@@ -1,6 +1,6 @@
 precision highp float;
 
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
 uniform int debug_mode;
 #endif
 

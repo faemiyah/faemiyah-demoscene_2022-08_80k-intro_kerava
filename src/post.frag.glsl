@@ -68,7 +68,7 @@ vec4 color_decode(float op)
 
 void main()
 {
-#if defined(USE_LD)
+#if defined(DNLOAD_USE_LD)
     if(debug_mode != 0)
     {
         vec3 col = texture2D(color, tex).rgb;

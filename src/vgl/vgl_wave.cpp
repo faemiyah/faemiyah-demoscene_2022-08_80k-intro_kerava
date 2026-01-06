@@ -1,5 +1,7 @@
 #include "vgl_wave.hpp"
 
+#if defined(VGL_USE_LD)
+
 #include "vgl_filesystem.hpp"
 
 #include <boost/algorithm/string.hpp>
@@ -84,17 +86,17 @@ string glsl_tidy(string_view source)
     return boost::algorithm::join(accepted, "\n");
 }
 
-#if !defined(DNLOAD_GLESV2)
+#if !defined(VGL_USE_GLES)
 
 /// Line comment regex on a string.
 ///
 /// \param bb String iterator.
 /// \param ee String endpoint.
 /// \return Iterator to end of match or original iterator if no match.
-static std::string::const_iterator regex_line_comment(std::string::const_iterator bb,
-        const std::string::const_iterator &ee)
+string::const_iterator regex_line_comment(string::const_iterator bb,
+        const string::const_iterator &ee)
 {
-    std::string::const_iterator ii = bb;
+    string::const_iterator ii = bb;
 
     if((ii == ee) || ('/' != *ii))
     {
@@ -126,10 +128,10 @@ static std::string::const_iterator regex_line_comment(std::string::const_iterato
 /// \param bb String iterator.
 /// \param ee String endpoint.
 /// \return Iterator to end of match or original iterator if no match.
-static std::string::const_iterator regex_block_comment(std::string::const_iterator bb,
-        const std::string::const_iterator &ee)
+string::const_iterator regex_block_comment(string::const_iterator bb,
+        const string::const_iterator &ee)
 {
-    std::string::const_iterator ii = bb;
+    string::const_iterator ii = bb;
     bool allow_return = false;
 
     if((ii == ee) || ('/' != *ii))
@@ -170,10 +172,10 @@ static std::string::const_iterator regex_block_comment(std::string::const_iterat
 /// \param bb String iterator.
 /// \param ee String endpoint.
 /// \return Iterator to end of match or original iterator if no match.
-static std::string::const_iterator regex_comment(std::string::const_iterator bb,
-        const std::string::const_iterator &ee)
+string::const_iterator regex_comment(string::const_iterator bb,
+        const string::const_iterator &ee)
 {
-    std::string::const_iterator ii = regex_line_comment(bb, ee);
+    string::const_iterator ii = regex_line_comment(bb, ee);
     if(ii != bb)
     {
         return ii;
@@ -186,10 +188,10 @@ static std::string::const_iterator regex_comment(std::string::const_iterator bb,
 /// \param bb String iterator.
 /// \param ee String endpoint.
 /// \return Iterator at the end of whitespace.
-static std::string::const_iterator regex_whitespace(std::string::const_iterator bb,
-        const std::string::const_iterator ee)
+string::const_iterator regex_whitespace(string::const_iterator bb,
+        const string::const_iterator ee)
 {
-    for(std::string::const_iterator ii = bb; (ii != ee); ++ii)
+    for(string::const_iterator ii = bb; (ii != ee); ++ii)
     {
         if(!isspace(static_cast<int>(*ii)))
         {
@@ -205,10 +207,10 @@ static std::string::const_iterator regex_whitespace(std::string::const_iterator 
 /// \param ee String endpoint.
 /// \param word Word to match.
 /// \return Iterator to end of match or original iterator if no match.
-static std::string::const_iterator regex_word_whitespace(std::string::const_iterator bb,
-        const std::string::const_iterator ee, std::string_view word)
+string::const_iterator regex_word_whitespace(string::const_iterator bb,
+        const string::const_iterator ee, string_view word)
 {
-    std::string::const_iterator ii = bb;
+    string::const_iterator ii = bb;
     unsigned jj = 0;
 
     while(word.length() > jj)
@@ -234,10 +236,10 @@ static std::string::const_iterator regex_word_whitespace(std::string::const_iter
 /// \param bb String iterator.
 /// \param ee String endpoint.
 /// \return Iterator to end of match or original iterator if no match.
-static std::string::const_iterator regex_precision_whitespace(std::string::const_iterator bb,
-        const std::string::const_iterator ee)
+string::const_iterator regex_precision_whitespace(string::const_iterator bb,
+        const string::const_iterator ee)
 {
-    std::string::const_iterator ii = regex_word_whitespace(bb, ee, "lowp");
+    string::const_iterator ii = regex_word_whitespace(bb, ee, "lowp");
     if(ii != bb)
     {
         return regex_whitespace(ii, ee);
@@ -261,16 +263,16 @@ static std::string::const_iterator regex_precision_whitespace(std::string::const
 /// \param bb String iterator.
 /// \param ee String endpoint.
 /// \return Iterator to end of match or original iterator if no match.
-static std::string::const_iterator regex_glesv2(std::string::const_iterator bb,
-        const std::string::const_iterator ee)
+string::const_iterator regex_gles(string::const_iterator bb,
+        const string::const_iterator ee)
 {
-    std::string::const_iterator ii = bb;
+    string::const_iterator ii = bb;
 
     // Try "precision" statement."
-    std::string::const_iterator jj = regex_word_whitespace(ii, ee, "precision");
+    string::const_iterator jj = regex_word_whitespace(ii, ee, "precision");
     if(jj != ii)
     {
-        std::string::const_iterator kk = jj;
+        string::const_iterator kk = jj;
         jj = regex_precision_whitespace(kk, ee);
         if(jj != kk)
         {
@@ -298,15 +300,19 @@ static std::string::const_iterator regex_glesv2(std::string::const_iterator bb,
     return bb;
 }
 
-std::string convert_glesv2_gl(std::string_view op)
+/// Convert given shader source string from GLES to regular GL.
+///
+/// \param op Input string.
+/// \return Converted string.
+string convert_gles_gl(string_view op)
 {
-    std::string ret(op);
-    std::string::const_iterator ii = cbegin(ret);
-    std::string::const_iterator ee = cend(ret);
+    string ret(op);
+    string::const_iterator ii = cbegin(ret);
+    string::const_iterator ee = cend(ret);
 
     while(ii != ee)
     {
-        std::string::const_iterator jj = regex_glesv2(ii, ee);
+        string::const_iterator jj = regex_gles(ii, ee);
         if(jj != ii)
         {
             ii = ret.erase(ii, jj);
@@ -333,8 +339,8 @@ string wave_preprocess_glsl(string_view op)
 {
     string input_source = read_file_locate(op).c_str();
 
-#if !defined(DNLOAD_GLESV2)
-    input_source = convert_glesv2_gl(input_source);
+#if !defined(VGL_USE_GLES)
+    input_source = convert_gles_gl(input_source);
 #endif
 
     // Split into GLSL preprocess code and the rest.
@@ -343,7 +349,8 @@ string wave_preprocess_glsl(string_view op)
     // Preprocess with wave.
     std::ostringstream preprocessed;
     wave_context ctx(cbegin(source.second), cend(source.second), "Boost::Wave GLSL;");
-    ctx.add_macro_definition("USE_LD");
+    ctx.add_macro_definition("DNLOAD_USE_LD");
+    ctx.add_macro_definition("VGL_USE_LD");
     for(const auto& vv : ctx)
     {
         preprocessed << vv.get_value();
@@ -353,4 +360,6 @@ string wave_preprocess_glsl(string_view op)
 }
 
 }
+
+#endif
 

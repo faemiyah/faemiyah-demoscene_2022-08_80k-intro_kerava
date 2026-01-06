@@ -5,7 +5,7 @@
 #include "vgl_limits.hpp"
 #include "vgl_realloc.hpp"
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
 #include "vgl_utility.hpp"
 #include <ostream>
 #endif
@@ -74,7 +74,7 @@ private:
     /// \param idx Index to check.
     constexpr void accessCheck(unsigned idx) const
     {
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(VGL_USE_LD) && defined(DEBUG)
         if(idx >= m_length)
         {
             // Can't use vgl_throw_exception.hpp yet.
@@ -90,7 +90,7 @@ private:
     /// \param idx Index to check.
     constexpr void accessCheck(int idx) const
     {
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(VGL_USE_LD) && defined(DEBUG)
         if(idx < 0)
         {
             // Can't use vgl_throw_exception.hpp yet.
@@ -160,7 +160,7 @@ public:
         return reinterpret_cast<const T*>("");
     }
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
     /// Finds the occurrance of another substring.
     ///
     /// \param rhs Right-hand side operand.
@@ -294,7 +294,7 @@ public:
         return !(*this == rhs);
     }
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
     /// Less than operator.
     ///
     /// \param rhs Right-hand-side operand.
@@ -319,8 +319,8 @@ public:
     }
 #endif
 
+#if defined(VGL_USE_LD)
 public:
-#if defined(USE_LD)
     /// Conversion to STL string operator.
     ///
     /// \return STL string.
@@ -335,7 +335,10 @@ public:
     {
         return std::string_view(data(), length());
     }
+#endif
 
+#if defined(VGL_USE_LD)
+public:
     /// Stream output operator.
     ///
     /// \param lhs Left-hand-side operand.
@@ -395,7 +398,7 @@ public:
         assign(op);
     }
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
     /// Constructor from std::string.
     ///
     /// Intentionally not explicit.
@@ -463,7 +466,7 @@ public:
         base_type::m_data = op.m_data;
         base_type::m_length = op.m_length;
         op.m_data = nullptr;
-#if defined(USE_LD) && defined(DEBUG)
+#if defined(VGL_USE_LD) && defined(DEBUG)
         op.m_length = 0;
 #endif
         return *this;
@@ -484,7 +487,7 @@ public:
     string& assign(const char* data, unsigned len)
     {
         VGL_ASSERT(data || (len == 0));
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
         if(length() == len)
         {
             detail::internal_memcpy(base_type::m_data, data, len);
@@ -580,7 +583,41 @@ public:
         }
     }
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
+    /// Erase a part of the string.
+    ///
+    /// \param start_iter Starting iterator to erase from.
+    /// \param end_iter Ending iterator to erase to.
+    iterator erase(const_iterator start_iter, const_iterator end_iter)
+    {
+        VGL_ASSERT(start_iter >= begin());
+        VGL_ASSERT(start_iter <= end());
+        VGL_ASSERT(end_iter >= begin());
+        VGL_ASSERT(end_iter <= end());
+        VGL_ASSERT(end_iter >= start_iter);
+        unsigned new_length = length() - static_cast<unsigned>(end_iter - start_iter);
+        value_type* new_data = array_new(static_cast<value_type*>(nullptr), new_length + 1);
+        value_type* insertion_iter = new_data;
+
+        for(const_iterator ii = cbegin(); (ii < start_iter); ++ii)
+        {
+            *insertion_iter = *ii;
+            ++insertion_iter;
+        }
+        iterator ret = insertion_iter;
+        for(const_iterator ii = end_iter, ee = cend(); (ii < ee); ++ii)
+        {
+            *insertion_iter = *ii;
+            ++insertion_iter;
+        }
+        *insertion_iter = static_cast<value_type>(0);
+
+        array_delete(base_type::m_data);
+        base_type::m_data = new_data;
+        base_type::m_length = new_length;
+        return ret;
+    }
+
     /// Insert into the string.
     ///
     /// \param pos Insertion position.
@@ -588,6 +625,9 @@ public:
     /// \param end_iter End iterator to insert.
     template<class IteratorType> void insert(const_iterator pos, IteratorType start_iter, IteratorType end_iter)
     {
+        VGL_ASSERT(pos >= begin());
+        VGL_ASSERT(pos <= end());
+        VGL_ASSERT(end_iter >= start_iter);
         unsigned new_length = length() + static_cast<unsigned>(end_iter - start_iter);
         value_type* new_data = array_new(static_cast<value_type*>(nullptr), new_length + 1);
         value_type* insertion_iter = new_data;
@@ -658,7 +698,7 @@ public:
         return assign(rhs.data(), rhs.length());
     }
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
     /// Addition operator.
     ///
     /// \param rhs Right-hand-side operand.
@@ -767,7 +807,7 @@ public:
 #endif
 };
 
-#if defined(USE_LD)
+#if defined(VGL_USE_LD)
 namespace detail
 {
 
