@@ -1393,23 +1393,23 @@ static void* intro_state_generate_mesh_wave(void* op)
 
     // Format of mesh data:
     // 3 floats of vertex data.
-    // 3 int16_t's of normal data
-    // => 18 bytes.
+    // 3 floats of normal data
+    // => 24 bytes.
     // 4 vertices per segment.
-    // => 72
+    // => 96
     for(unsigned ii = 0; (ii < IntroData::VISUALIZATION_ELEMENTS); ++ii)
     {
         // Left channel only.
         float mid_y = input[ii * 2] * IntroData::VISUALIZATION_MULTIPLIER_WAVE;
         float lo_y = mid_y - IntroData::VISUALIZATION_HEIGHT_WAVE;
         float hi_y = mid_y + IntroData::VISUALIZATION_HEIGHT_WAVE;
-        unsigned offset = ii * 72;
+        unsigned offset = ii * 96;
         VGL_ASSERT(offset < msh.getData().getDataSize());
         // Use memcpy and uint8_t buffers to avoid unaligned write.
-        uint8_t* y1 = mesh_data + offset + (18 * 0) + 4;
-        uint8_t* y2 = mesh_data + offset + (18 * 1) + 4;
-        uint8_t* y3 = mesh_data + offset + (18 * 2) + 4;
-        uint8_t* y4 = mesh_data + offset + (18 * 3) + 4;
+        uint8_t* y1 = mesh_data + offset + (24 * 0) + 4;
+        uint8_t* y2 = mesh_data + offset + (24 * 1) + 4;
+        uint8_t* y3 = mesh_data + offset + (24 * 2) + 4;
+        uint8_t* y4 = mesh_data + offset + (24 * 3) + 4;
         vgl::detail::internal_memcpy(y1, &lo_y, sizeof(float));
         vgl::detail::internal_memcpy(y2, &lo_y, sizeof(float));
         vgl::detail::internal_memcpy(y3, &hi_y, sizeof(float));
@@ -1435,10 +1435,10 @@ static void* intro_state_generate_mesh_fft(void* op)
 
     // Format of mesh data:
     // 3 floats of vertex data.
-    // 3 int16_t's of normal data
-    // => 18 bytes.
+    // 3 floats of normal data
+    // => 24 bytes.
     // 4 vertices per segment.
-    // => 72
+    // => 96
     for(unsigned ii = 0; (ii < IntroData::VISUALIZATION_ELEMENTS); ++ii)
     {
         float value = static_cast<float>(fft_data[ii]);
@@ -1446,13 +1446,13 @@ static void* intro_state_generate_mesh_fft(void* op)
         // Write to mesh.
         float lo_y = 0.0f;
         float hi_y = value * IntroData::VISUALIZATION_MULTIPLIER_FFT;
-        unsigned offset = ii * 72;
+        unsigned offset = ii * 96;
         VGL_ASSERT(offset < msh.getData().getDataSize());
         // Use memcpy and uint8_t buffers to avoid unaligned write.
-        uint8_t* y1 = mesh_data + offset + (18 * 0) + 4;
-        uint8_t* y2 = mesh_data + offset + (18 * 1) + 4;
-        uint8_t* y3 = mesh_data + offset + (18 * 2) + 4;
-        uint8_t* y4 = mesh_data + offset + (18 * 3) + 4;
+        uint8_t* y1 = mesh_data + offset + (24 * 0) + 4;
+        uint8_t* y2 = mesh_data + offset + (24 * 1) + 4;
+        uint8_t* y3 = mesh_data + offset + (24 * 2) + 4;
+        uint8_t* y4 = mesh_data + offset + (24 * 3) + 4;
         vgl::detail::internal_memcpy(y1, &lo_y, sizeof(float));
         vgl::detail::internal_memcpy(y2, &lo_y, sizeof(float));
         vgl::detail::internal_memcpy(y3, &hi_y, sizeof(float));
