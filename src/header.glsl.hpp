@@ -4,6 +4,7 @@ static const char *g_shader_header = ""
 #if defined(DNLOAD_USE_LD)
 "header.glsl"
 #else
+"#version 100\n"
 "vec3 n(float v)"
 "{"
 "float r=v*65535.1,e=r-floor(r);"
